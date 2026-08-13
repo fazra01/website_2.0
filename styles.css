@@ -1,4 +1,13 @@
+    @view-transition {
+    navigation: auto;
+    }
 
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+    animation-duration: 350ms;
+    animation-timing-function: ease;
+    }
+    
         * { box-sizing: border-box; }
 
         :root {
