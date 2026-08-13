@@ -127,7 +127,7 @@ background-clip: text;
   sticky after the photograph passes it.
 */
 .hero-spacer {
-  height: 18vh;
+  height: 28vh;
 }
 
 
@@ -166,10 +166,10 @@ background-clip: text;
   display: grid;
 
   grid-template-columns:
-    0.7fr
-    2fr;
+    34vw
+    minmax(0, 1fr);
 
-  gap: 6vw;
+  gap: 4vw;
 
   align-items: start;
 }
@@ -183,9 +183,14 @@ background-clip: text;
   font-style: italic;
 }
 
+.lyric-credit {
+
+  font-size: 0.72em;
+  
+}
 
 .statement-text {
-  max-width: none;
+  max-width: 680px;
 
   font-size: clamp(17px, 1.25vw, 21px);
 
@@ -216,12 +221,12 @@ background-clip: text;
     height: 35vh;
   }
 
-  .statement-content {
+    .statement-content {
     padding:
-      8vh
-      7vw
-      14vh;
-  }
+        3vh
+        7vw
+        18vh;
+    }
 
   .statement-heading,
   .statement-grid {
