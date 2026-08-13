@@ -11,9 +11,9 @@ body {
   color: #111;
 
   font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
+  "Times New Roman",
+  Times,
+  serif;
 }
 
 
@@ -127,7 +127,7 @@ background-clip: text;
   sticky after the photograph passes it.
 */
 .hero-spacer {
-  height: 28vh;
+  height: 32vh;
 }
 
 
@@ -138,7 +138,7 @@ background-clip: text;
 .statement-content {
   padding:
     3vh
-    11vw
+    7vw
     18vh;
 }
 
@@ -147,7 +147,7 @@ background-clip: text;
   display: flex;
   justify-content: flex-end;
 
-  margin-bottom: 6vh;
+  margin-bottom: 16vh;
 }
 
 .statement-heading p {
@@ -166,10 +166,10 @@ background-clip: text;
   display: grid;
 
   grid-template-columns:
-    34vw
+    30vw
     minmax(0, 1fr);
 
-  gap: 4vw;
+  gap: 3vw;
 
   align-items: start;
 }
@@ -186,7 +186,7 @@ background-clip: text;
 .lyric-credit {
 
   font-size: 0.72em;
-  
+
 }
 
 .statement-text {
@@ -218,7 +218,7 @@ background-clip: text;
   }
 
   .hero-spacer {
-    height: 35vh;
+    height: 18vh;
   }
 
     .statement-content {
