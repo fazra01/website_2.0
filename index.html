@@ -99,6 +99,12 @@
         </div>
 
         <!-- FADI MODE PREVIEWS -->
+         <div class="preview-card has-media info-preview" data-preview="contact" data-name-color="light">
+          <img
+            src="images/contact.png"
+            alt="Contact preview"
+          />
+        </div>
         <div class="preview-card has-media info-preview" data-preview="about" data-name-color="light">
           <img
             src="images/about.jpeg"
@@ -135,7 +141,7 @@
     <nav class="info-nav bottom ar" aria-label="Personal navigation in Arabic">
       <a class="info-link" href="#contact" data-info="contact">تواصل</a>
       <a class="info-link" href="#artist-statement" data-info="artist-statement">بيان الفنان</a>
-      <a class="info-link" href="#about" data-info="about">عني</a>
+      <a class="info-link" href="#about" data-info="about">عنّي</a>
     </nav>
 
     <!-- ENGINEERING -->
@@ -183,12 +189,6 @@
     function showInfoPreview(key) {
       if (!stage.classList.contains("info-mode")) return;
 
-      // Contact intentionally has no image.
-      if (key === "contact") {
-        clearInfoPreview();
-        return;
-      }
-
       let activeCard = null;
 
       previewCards.forEach(card => {
@@ -216,37 +216,88 @@
 
     // Default state: black name on the plain light page.
     setNameContrast("dark");
+    let cascadeTimer;
 
+const CASCADE_STEP = 70;
+const CASCADE_FINISH = 700;
 
-    // Art / Engineering are now toggles:
-    // click once = reveal projects
-    // click again = collapse projects
-    document.querySelectorAll(".axis-label").forEach(label => {
-      label.addEventListener("click", (event) => {
-        event.stopPropagation();
+function prepareCascade(fromTop) {
+  const orderedRows = fromTop
+    ? projectRows
+    : [...projectRows].reverse();
 
-        // If we are in Fadi/info mode, return to work mode first.
-        if (stage.classList.contains("info-mode")) {
-          stage.classList.remove("info-mode", "info-ar", "info-en");
-          stage.classList.add("revealed");
-          identityButton.setAttribute("aria-expanded", "false");
-          return;
-        }
+  orderedRows.forEach((row, index) => {
+    row.style.setProperty(
+      "--cascade-delay",
+      `${index * CASCADE_STEP}ms`
+    );
 
-        stage.classList.toggle("revealed");
+    row.style.setProperty(
+      "--cascade-offset",
+      fromTop ? "-10px" : "10px"
+    );
+  });
+}
 
-        // When collapsing, also clear any active preview/highlight.
-        if (!stage.classList.contains("revealed")) {
-          clearProjectPreview();
+function openProjects(fromTop) {
+  clearTimeout(cascadeTimer);
 
-          if (document.activeElement &&
-              document.activeElement.classList &&
-              document.activeElement.classList.contains("project")) {
-            document.activeElement.blur();
-          }
-        }
-      });
-    });
+  stage.classList.remove("collapsing");
+  prepareCascade(fromTop);
+
+  requestAnimationFrame(() => {
+    stage.classList.add("revealed");
+  });
+}
+
+function closeProjects(fromTop) {
+  clearTimeout(cascadeTimer);
+
+  prepareCascade(fromTop);
+  clearProjectPreview();
+
+  stage.classList.add("collapsing");
+  stage.classList.remove("revealed");
+
+  cascadeTimer = setTimeout(() => {
+    stage.classList.remove("collapsing");
+  }, CASCADE_FINISH);
+}
+
+// ART / ENGINEERING CASCADE
+document.querySelectorAll(".axis-label").forEach(label => {
+  label.addEventListener("click", event => {
+    event.stopPropagation();
+
+    const axisRow = label.closest(".axis-row");
+    const fromTop = axisRow.classList.contains("top");
+
+    // If Fadi/About mode is open, return to project mode.
+    if (stage.classList.contains("info-mode")) {
+      clearInfoPreview();
+
+      stage.classList.remove(
+        "info-mode",
+        "info-ar",
+        "info-en"
+      );
+
+      identityButton.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+      openProjects(fromTop);
+      return;
+    }
+
+    if (stage.classList.contains("revealed")) {
+      closeProjects(fromTop);
+    } else {
+      openProjects(fromTop);
+    }
+  });
+});
 
     // Language logic changes depending on mode.
     //
@@ -287,14 +338,50 @@
       const ar = row.querySelector(".axis-label.ar");
 
       function show(direction) {
+      clearTimeout(row.hideTimer);
+
+      row.classList.remove(
+        "show-line",
+        "hiding",
+        "hide-to-right",
+        "hide-to-left",
+        "dir-right",
+        "dir-left"
+      );
+
+      row.classList.toggle("dir-right", direction === "right");
+      row.classList.toggle("dir-left", direction === "left");
+
+      requestAnimationFrame(() => {
         row.classList.add("show-line");
-        row.classList.toggle("dir-right", direction === "right");
-        row.classList.toggle("dir-left", direction === "left");
+      });
+    }
+
+    function hide() {
+      clearTimeout(row.hideTimer);
+
+      const movingRight = row.classList.contains("dir-right");
+
+      row.classList.add("hiding");
+
+      if (movingRight) {
+        row.classList.add("hide-to-right");
+      } else {
+        row.classList.add("hide-to-left");
       }
 
-      function hide() {
-        row.classList.remove("show-line", "dir-right", "dir-left");
-      }
+      row.classList.remove("show-line");
+
+      row.hideTimer = setTimeout(() => {
+        row.classList.remove(
+          "hiding",
+          "hide-to-right",
+          "hide-to-left",
+          "dir-right",
+          "dir-left"
+        );
+      }, 800);
+    }
 
       en.addEventListener("mouseenter", () => show("right"));
       ar.addEventListener("mouseenter", () => show("left"));
@@ -380,29 +467,61 @@
     });
 
     // Clicking the name toggles between:
-    // 1) Art / Engineering work mode
-    // 2) Fadi personal-info mode
-    identityButton.addEventListener("click", event => {
-      event.stopPropagation();
+// 1) Art / Engineering work mode
+// 2) Fadi personal-info mode
+identityButton.addEventListener("click", event => {
+  event.stopPropagation();
 
-      const enteringInfoMode = !stage.classList.contains("info-mode");
+  const isInfoMode = stage.classList.contains("info-mode");
 
-      if (enteringInfoMode) {
-        // Collapse all work.
-        stage.classList.add("info-mode", "info-en");
-        stage.classList.remove("info-ar", "revealed");
+  // OPEN FADI MODE
+  if (!isInfoMode) {
+    const wasArabic = stage.classList.contains("lang-ar");
 
-        // Hide any active project preview.
-        clearProjectPreview();
+    stage.classList.add("info-mode");
+    stage.classList.remove(
+      "info-en",
+      "info-ar",
+      "revealed"
+    );
 
-        identityButton.setAttribute("aria-expanded", "true");
-      } else {
-        // Return to the clean Art / Engineering landing state.
-        clearInfoPreview();
-        stage.classList.remove("info-mode", "info-ar", "info-en");
-        identityButton.setAttribute("aria-expanded", "false");
-      }
-    });
+    // Keep whichever language the name was already using.
+    stage.classList.add(
+      wasArabic ? "info-ar" : "info-en"
+    );
+
+    clearProjectPreview();
+
+    identityButton.setAttribute(
+      "aria-expanded",
+      "true"
+    );
+
+    return;
+  }
+
+  // CLOSE FADI MODE
+  const isArabic = stage.classList.contains("info-ar");
+
+  clearInfoPreview();
+
+  stage.classList.remove(
+    "info-mode",
+    "info-en",
+    "info-ar"
+  );
+
+  // Return to the homepage in the SAME language.
+  stage.classList.remove("lang-en", "lang-ar");
+  stage.classList.add(
+    isArabic ? "lang-ar" : "lang-en"
+  );
+
+  identityButton.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+});
 
     // Personal links:
     // about / artist statement show center previews;

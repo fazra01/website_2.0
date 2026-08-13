@@ -59,35 +59,47 @@
         .axis-row.bottom { bottom: clamp(28px, 6vh, 62px); }
 
         .axis-label {
-        pointer-events: auto;
-        display: inline-block;
-        width: max-content;
-        padding: 2px 0;
-        font-size: clamp(20px, 1.7vw, 30px);
-        line-height: 1;
-        cursor: pointer;
-        transition: opacity .22s ease, transform .22s ease;
+            pointer-events: auto;
+            display: inline-block;
+            width: max-content;
+            padding: 2px 0;
+            font-size: clamp(20px, 1.7vw, 30px);
+            line-height: 1;
+            cursor: pointer;
+            transition: opacity .22s ease, transform .22s ease;
         }
 
-        .axis-label:hover { transform: translateY(-1px); }
-
         .axis-label.ar {
-        font-family: "Geeza Pro", "Noto Naskh Arabic", Arial, sans-serif;
-        direction: rtl;
+            font-family: "Geeza Pro", "Noto Naskh Arabic", Arial, sans-serif;
+            direction: rtl;
         }
 
         .axis-line {
-        height: 1px;
-        position: relative;
-        opacity: 0;
-        transform: scaleX(.12);
-        transform-origin: center;
-        background: var(--ink);
-        transition: opacity .16s ease, transform .44s var(--ease);
+            height: 1px;
+            position: relative;
+            transform: scaleX(0);
+            background: var(--ink);
+            transition: transform .7s var(--ease);
+        }
+        /* Appearing */
+        .axis-row.dir-right .axis-line {
+        transform-origin: left center;
+        }
+
+        .axis-row.dir-left .axis-line {
+        transform-origin: right center;
+        }
+
+        /* Disappearing toward the destination */
+        .axis-row.hide-to-right .axis-line {
+        transform-origin: right center;
+        }
+
+        .axis-row.hide-to-left .axis-line {
+        transform-origin: left center;
         }
 
         .axis-row.show-line .axis-line {
-        opacity: 1;
         transform: scaleX(1);
         }
 
@@ -102,7 +114,10 @@
         opacity: 0;
         }
 
-        .axis-row.show-line .axis-line::after { opacity: 1; }
+        .axis-row.show-line .axis-line::after,
+        .axis-row.hiding .axis-line::after {
+        opacity: 1;
+        }
 
         .axis-row.dir-right .axis-line::after {
         right: 0;
@@ -118,52 +133,56 @@
         PROJECT FIELD
         ====================================== */
 
-        .projects {
-        position: absolute;
-        inset: 16vh clamp(28px, 4.5vw, 72px) 15vh;
-        display: grid;
-        grid-template-rows: repeat(5, 1fr);
-        align-items: center;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(8px);
-        pointer-events: none;
-        transition:
-            opacity .38s ease,
-            transform .5s var(--ease),
-            visibility 0s linear .38s;
-        z-index: 6;
-        }
+.projects {
+  position: absolute;
+  inset: 16vh clamp(28px, 4.5vw, 72px) 15vh;
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  align-items: center;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 6;
+}
 
-        .stage.revealed:not(.info-mode) .projects {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-        pointer-events: auto;
-        transition:
-            opacity .38s ease,
-            transform .5s var(--ease),
-            visibility 0s linear 0s;
-        }
+.stage.revealed:not(.info-mode) .projects,
+.stage.collapsing:not(.info-mode) .projects {
+  visibility: visible;
+}
 
-        /* Hard lock: when collapsed, individual project controls cannot be
-        hovered, clicked, focused, or tabbed into through pointer interaction. */
-        .stage:not(.revealed) .project,
-        .stage.info-mode .project {
-        pointer-events: none !important;
-        visibility: hidden;
-        }
+.stage.revealed:not(.info-mode) .projects {
+  pointer-events: auto;
+}
 
-        .project-row {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) clamp(250px, 30vw, 460px) minmax(0, 1fr);
-        align-items: center;
-        gap: 32px;
-        min-height: 78px;
+.stage.collapsing .projects {
+  pointer-events: none;
+}
 
-        /* IMPORTANT: the row itself cannot trigger anything */
-        pointer-events: none;
-        }
+.stage:not(.revealed):not(.collapsing) .project,
+.stage.info-mode .project {
+  pointer-events: none !important;
+  visibility: hidden;
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(250px, 30vw, 460px) minmax(0, 1fr);
+  align-items: center;
+  gap: 32px;
+  min-height: 78px;
+  pointer-events: none;
+
+  opacity: 0;
+  transform: translateY(var(--cascade-offset, 10px));
+
+  transition:
+    opacity .28s ease var(--cascade-delay, 0ms),
+    transform .35s var(--ease) var(--cascade-delay, 0ms);
+}
+
+.stage.revealed:not(.info-mode) .project-row {
+  opacity: 1;
+  transform: translateY(0);
+}
 
         .project {
         pointer-events: auto;
@@ -200,12 +219,7 @@
         .stage.lang-ar .project.en,
         .stage.lang-ar .axis-label.en { opacity: .32; }
 
-        .project.is-paired {
-        opacity: 1 !important;
-        }
-
-        .project.en.is-paired { transform: translateX(7px); }
-        .project.ar.is-paired { transform: translateX(-7px); }
+       
 
         /* =====================================
         CENTER PREVIEW
@@ -325,7 +339,10 @@
         max-width: 68%;
         max-height: 72%;
         }
-
+        .preview-card[data-preview="contact"] img {
+            max-width: 68%;
+            max-height: 72%;
+        }
         /* The YouTube preview is also kept horizontal. */
         .preview-card.video-card video {
         position: relative;
@@ -458,10 +475,14 @@
         opacity: .6;
         }
 
-        .info-nav.ar {
-        direction: rtl;
-        font-family: "Geeza Pro", "Noto Naskh Arabic", Arial, sans-serif;
-        }
+            .info-nav.ar {
+            direction: ltr;
+            font-family: "Geeza Pro", "Noto Naskh Arabic", Arial, sans-serif;
+            }
+
+            .info-nav.ar .info-link {
+            direction: rtl;
+            }
 
         /* Entering Fadi mode collapses work completely */
         .stage.info-mode .projects {
