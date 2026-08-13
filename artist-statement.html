@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Artist Statement — Fadi Azra</title>
+
+  <link rel="stylesheet" href="artist-statement.css">
+</head>
+
+<body>
+
+  <main>
+
+    <!-- HERO + SCROLLING TITLE -->
+    <section class="hero-scroll">
+
+      <div class="sticky-title">
+        <h1 id="crossingTitle">
+          Artist Statement
+        </h1>
+      </div>
+
+      <figure class="hero-image" id="heroImage">
+        <img
+          src="images/artist_statement.png"
+          alt="Photograph from Fadi Azra's family archive"
+        >
+      </figure>
+
+      <div class="hero-spacer"></div>
+
+    </section>
+
+
+    <!-- ARTIST STATEMENT -->
+    <section class="statement-content">
+
+      <header class="statement-heading">
+        <p>Fadi Azra</p>
+      </header>
+
+      <div class="statement-grid">
+
+        <div class="statement-label">
+          Memory<br>
+          Migration<br>
+          Dislocation
+        </div>
+
+        <div class="statement-text">
+
+          <p>
+            I return repeatedly to the same photograph of my parents sitting
+            in the courtyard where I grew up in Syria. Figures appear, fade,
+            and shift from painting to painting. Colors evoke vivid memories,
+            or the artificiality of some; from a past or future I may or may
+            not have existed in. People are RE-placed where they shouldn’t be.
+          </p>
+
+          <p>
+            This instability isn’t only internal. My existence in the United
+            States feels, in itself, like a protest. In the wake of restrictions
+            that define who is allowed to enter or belong, being here unsettles
+            those boundaries. These restrictions force years of separation
+            from my people and familiar places, with no returning back, and no
+            possibility for them to come.
+          </p>
+
+          <p>
+            In a state of separation, memories become unanchored and question
+            existence beyond my mind. My work does not attempt to resolve this
+            instability, but to remain within it, and to grieve its tension.
+            I hope to create a space where others can recognize their own
+            experiences of absence, migration, and memory. My work is both a
+            record of my journey and an invitation to connect across distance.
+            Art is where I make sense of my dislocation, and where I continue
+            to search for what it means to call a place home again.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+    const heroImage = document.getElementById("heroImage");
+    const image = heroImage.querySelector("img");
+    const title = document.getElementById("crossingTitle");
+
+    function updateTitleColor() {
+      const imageRect = heroImage.getBoundingClientRect();
+      const titleRect = title.getBoundingClientRect();
+
+      /*
+        How much of the title is still physically
+        sitting above the bottom edge of the image?
+      */
+      const overlap =
+        imageRect.bottom - titleRect.top;
+
+      const ratio = Math.max(
+        0,
+        Math.min(
+          1,
+          overlap / titleRect.height
+        )
+      );
+
+      title.style.setProperty(
+        "--split",
+        `${ratio * 100}%`
+      );
+    }
+
+    window.addEventListener(
+      "scroll",
+      updateTitleColor,
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "resize",
+      updateTitleColor
+    );
+
+    /*
+      IMPORTANT:
+      Wait until the photograph has its real dimensions
+      before calculating the title color.
+    */
+    image.addEventListener(
+      "load",
+      updateTitleColor
+    );
+
+    requestAnimationFrame(updateTitleColor);
+  </script>
+
+</body>
+</html>

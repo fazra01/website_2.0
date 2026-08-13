@@ -1,0 +1,228 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  background: #f7f7f3;
+  color: #111;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+}
+
+
+/* =====================================
+   HERO
+===================================== */
+
+.hero-scroll {
+  position: relative;
+}
+
+
+/*
+  The title stays in one viewport position
+  while the photograph scrolls behind it.
+*/
+.sticky-title {
+  position: sticky;
+
+  top: 63vh;
+
+  height: 0;
+
+  margin-left: 10vw;
+
+  z-index: 10;
+
+  pointer-events: none;
+}
+
+
+.sticky-title h1 {
+  --split: 100%;
+
+  display: inline-block;
+
+  margin: 0;
+
+  font-size: clamp(42px, 4.5vw, 72px);
+  line-height: 1;
+
+  font-weight: 400;
+
+  /*
+    WHITE above the image boundary.
+    BLACK below the image boundary.
+
+    JS moves --split as the image passes.
+  */
+  color: transparent;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #fff 0,
+      #fff var(--split),
+      #111 var(--split),
+      #111 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+
+/* =====================================
+   IMAGE
+
+   NO CROPPING.
+===================================== */
+
+.hero-image {
+  margin:
+    24px
+    20px
+    0;
+}
+
+
+.hero-image img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  object-fit: initial;
+}
+
+
+/*
+  Gives the title enough time to remain
+  sticky after the photograph passes it.
+*/
+.hero-spacer {
+  height: 18vh;
+}
+
+
+/* =====================================
+   ARTIST STATEMENT CONTENT
+===================================== */
+
+.statement-content {
+  padding:
+    3vh
+    11vw
+    18vh;
+}
+
+
+.statement-heading {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-bottom: 6vh;
+}
+
+.statement-heading p {
+  margin: 0;
+
+  font-size: clamp(28px, 3vw, 48px);
+  font-weight: 400;
+}
+
+
+/* =====================================
+   BODY
+===================================== */
+
+.statement-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1.35fr;
+
+  gap: 10vw;
+
+  align-items: start;
+}
+
+
+.statement-label {
+  font-size: 16px;
+
+  line-height: 1.45;
+
+  font-style: italic;
+}
+
+
+.statement-text {
+  max-width: 680px;
+
+  font-size: clamp(17px, 1.25vw, 21px);
+
+  line-height: 1.5;
+}
+
+
+.statement-text p {
+  margin:
+    0
+    0
+    1.5em;
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 760px) {
+
+  .sticky-title {
+    top: 60vh;
+    margin-left: 7vw;
+  }
+
+  .hero-image {
+    margin:
+      12px
+      12px
+      0;
+  }
+
+  .hero-spacer {
+    height: 35vh;
+  }
+
+  .statement-content {
+    padding:
+      8vh
+      7vw
+      14vh;
+  }
+
+  .statement-heading,
+  .statement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .statement-heading {
+    gap: 14px;
+    margin-bottom: 12vh;
+  }
+
+  .statement-heading p {
+    text-align: left;
+  }
+
+}
