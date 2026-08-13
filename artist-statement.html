@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Artist Statement — Fadi Azra</title>
+  <title>artist statement — Fadi Azra</title>
 
   <link rel="stylesheet" href="artist-statement.css">
 </head>
@@ -18,7 +18,7 @@
 
         <div class="sticky-titles">
         <h1 class="crossing-title title-en">
-            Artist Statement
+            artist statement
         </h1>
 
         <h1 class="crossing-title title-ar">
@@ -48,9 +48,11 @@
       <div class="statement-grid">
 
         <div class="statement-label">
-          Memory<br>
-          Migration<br>
-          Dislocation
+         صُورَة حامِلْتَها بِإيدي<br>
+         صِرْلي كَم سَنَة<br>
+          صِرْلي كَم سَنَة<br>
+          <br>
+         لين أديب، لكنْ هَلي، ٢٠٢٦
         </div>
 
         <div class="statement-text">
@@ -98,9 +100,9 @@
     const titles = document.querySelectorAll(".crossing-title");
 
     function updateTitleColor() {
-    const imageRect = heroImage.getBoundingClientRect();
+        const imageRect = heroImage.getBoundingClientRect();
 
-    titles.forEach(title => {
+        titles.forEach(title => {
         const titleRect = title.getBoundingClientRect();
 
         const overlap =
@@ -111,14 +113,14 @@
         Math.min(
             1,
             overlap / titleRect.height
-        )
-        );
+            )
+            );
 
-        title.style.setProperty(
-        "--split",
-        `${ratio * 100}%`
-        );
-    });
+            title.style.setProperty(
+            "--split",
+            `${ratio * 100}%`
+            );
+        });
     }
 
     window.addEventListener(

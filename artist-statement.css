@@ -30,22 +30,25 @@ body {
   The title stays in one viewport position
   while the photograph scrolls behind it.
 */
-.sticky-title {
+.sticky-titles {
   position: sticky;
 
-  top: 63vh;
+  top: 16vh;
 
   height: 0;
 
-  margin-left: 10vw;
+  padding: 0 7vw;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 
   z-index: 10;
-
   pointer-events: none;
 }
 
 
-.sticky-title h1 {
+.crossing-title {
   --split: 100%;
 
   display: inline-block;
@@ -78,7 +81,27 @@ body {
   background-clip: text;
 }
 
+.title-ar {
+  direction: rtl;
+  text-align: right;
 
+  font-family:
+    "Geeza Pro",
+    "Noto Naskh Arabic",
+    Arial,
+    sans-serif;
+    background:
+  linear-gradient(
+    to bottom,
+    #fff 0,
+    #fff var(--split),
+    transparent var(--split),
+    transparent 100%
+  );
+
+-webkit-background-clip: text;
+background-clip: text;
+}
 /* =====================================
    IMAGE
 
@@ -143,10 +166,10 @@ body {
   display: grid;
 
   grid-template-columns:
-    1fr
-    1.35fr;
+    0.7fr
+    2fr;
 
-  gap: 10vw;
+  gap: 6vw;
 
   align-items: start;
 }
@@ -162,7 +185,7 @@ body {
 
 
 .statement-text {
-  max-width: 680px;
+  max-width: none;
 
   font-size: clamp(17px, 1.25vw, 21px);
 
@@ -184,16 +207,9 @@ body {
 
 @media (max-width: 760px) {
 
-  .sticky-title {
+  .sticky-titles {
     top: 60vh;
     margin-left: 7vw;
-  }
-
-  .hero-image {
-    margin:
-      12px
-      12px
-      0;
   }
 
   .hero-spacer {
