@@ -16,11 +16,15 @@
     <!-- HERO + SCROLLING TITLE -->
     <section class="hero-scroll">
 
-      <div class="sticky-title">
-        <h1 id="crossingTitle">
-          Artist Statement
+        <div class="sticky-titles">
+        <h1 class="crossing-title title-en">
+            Artist Statement
         </h1>
-      </div>
+
+        <h1 class="crossing-title title-ar">
+            بيان الفنان
+        </h1>
+        </div>
 
       <figure class="hero-image" id="heroImage">
         <img
@@ -91,31 +95,30 @@
   <script>
     const heroImage = document.getElementById("heroImage");
     const image = heroImage.querySelector("img");
-    const title = document.getElementById("crossingTitle");
+    const titles = document.querySelectorAll(".crossing-title");
 
     function updateTitleColor() {
-      const imageRect = heroImage.getBoundingClientRect();
-      const titleRect = title.getBoundingClientRect();
+    const imageRect = heroImage.getBoundingClientRect();
 
-      /*
-        How much of the title is still physically
-        sitting above the bottom edge of the image?
-      */
-      const overlap =
+    titles.forEach(title => {
+        const titleRect = title.getBoundingClientRect();
+
+        const overlap =
         imageRect.bottom - titleRect.top;
 
-      const ratio = Math.max(
+        const ratio = Math.max(
         0,
         Math.min(
-          1,
-          overlap / titleRect.height
+            1,
+            overlap / titleRect.height
         )
-      );
+        );
 
-      title.style.setProperty(
+        title.style.setProperty(
         "--split",
         `${ratio * 100}%`
-      );
+        );
+    });
     }
 
     window.addEventListener(
