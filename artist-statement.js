@@ -1,51 +1,67 @@
+window.initArtistStatementPage = function () {
+  const heroImage = document.getElementById("heroImage");
 
-        const heroImage = document.getElementById("heroImage");
-    const image = heroImage.querySelector("img");
-    const titles = document.querySelectorAll(".crossing-title");
+  if (!heroImage) return function () {};
 
-    function updateTitleColor() {
-        const imageRect = heroImage.getBoundingClientRect();
+  const image = heroImage.querySelector("img");
+  const titles = document.querySelectorAll(".crossing-title");
 
-        titles.forEach(title => {
-        const titleRect = title.getBoundingClientRect();
+  function updateTitleColor() {
+    const imageRect = heroImage.getBoundingClientRect();
 
-        const overlap =
+    titles.forEach(title => {
+      const titleRect = title.getBoundingClientRect();
+
+      const overlap =
         imageRect.bottom - titleRect.top;
 
-        const ratio = Math.max(
+      const ratio = Math.max(
         0,
         Math.min(
-            1,
-            overlap / titleRect.height
-            )
-            );
+          1,
+          overlap / titleRect.height
+        )
+      );
 
-            title.style.setProperty(
-            "--split",
-            `${ratio * 100}%`
-            );
-        });
-    }
+      title.style.setProperty(
+        "--split",
+        `${ratio * 100}%`
+      );
+    });
+  }
 
-    window.addEventListener(
+  window.addEventListener(
+    "scroll",
+    updateTitleColor,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "resize",
+    updateTitleColor
+  );
+
+  image.addEventListener(
+    "load",
+    updateTitleColor
+  );
+
+  requestAnimationFrame(updateTitleColor);
+
+  return function cleanupArtistStatementPage() {
+    window.removeEventListener(
       "scroll",
-      updateTitleColor,
-      { passive: true }
+      updateTitleColor
     );
 
-    window.addEventListener(
+    window.removeEventListener(
       "resize",
       updateTitleColor
     );
 
-    /*
-      IMPORTANT:
-      Wait until the photograph has its real dimensions
-      before calculating the title color.
-    */
-    image.addEventListener(
+    image.removeEventListener(
       "load",
       updateTitleColor
     );
-
-    requestAnimationFrame(updateTitleColor);
+  };
+};
