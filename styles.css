@@ -471,10 +471,6 @@
         transition: opacity .22s ease;
         }
 
-        .info-link:hover {
-        opacity: .6;
-        }
-
             .info-nav.ar {
             direction: ltr;
             font-family: "Geeza Pro", "Noto Naskh Arabic", Arial, sans-serif;
