@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fadi Azra — Portfolio Prototype v2</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg: #f7f7f3;
+      --ink: #111;
+      --muted: rgba(17,17,17,.30);
+      --soft: rgba(17,17,17,.10);
+      --ease: cubic-bezier(.22,.61,.36,1);
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    body { overflow: hidden; }
+
+    button, a {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      border: 0;
+      background: transparent;
+    }
+
+    .stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      min-height: 650px;
+      padding: clamp(28px, 4vw, 64px);
+      overflow: hidden;
+    }
+
+    /* =====================================
+       ART / ENGINEERING AXES
+       Only the words themselves are clickable.
+    ====================================== */
+
+    .axis-row {
+      position: absolute;
+      left: clamp(28px, 4vw, 64px);
+      right: clamp(28px, 4vw, 64px);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 18px;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .axis-row.top { top: clamp(28px, 6vh, 62px); }
+    .axis-row.bottom { bottom: clamp(28px, 6vh, 62px); }
+
+    .axis-label {
+      pointer-events: auto;
+      display: inline-block;
+      width: max-content;
+      padding: 2px 0;
+      font-size: clamp(20px, 1.7vw, 30px);
+      line-height: 1;
+      cursor: pointer;
+      transition: opacity .22s ease, transform .22s ease;
+    }
+
+    .axis-label:hover { transform: translateY(-1px); }
+
+    .axis-label.ar {
+      font-family: "Geeza Pro", "Noto Naskh Arabic", Arial, sans-serif;
+      direction: rtl;
+    }
+
+    .axis-line {
+      height: 1px;
+      position: relative;
+      opacity: 0;
+      transform: scaleX(.12);
+      transform-origin: center;
+      background: var(--ink);
+      transition: opacity .16s ease, transform .44s var(--ease);
+    }
+
+    .axis-row.show-line .axis-line {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    .axis-line::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 7px;
+      height: 7px;
+      border-top: 1px solid var(--ink);
+      border-right: 1px solid var(--ink);
+      opacity: 0;
+    }
+
+    .axis-row.show-line .axis-line::after { opacity: 1; }
+
+    .axis-row.dir-right .axis-line::after {
+      right: 0;
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .axis-row.dir-left .axis-line::after {
+      left: 0;
+      transform: translateY(-50%) rotate(-135deg);
+    }
+
+    /* =====================================
+       PROJECT FIELD
+    ====================================== */
+
+    .projects {
+      position: absolute;
+      inset: 16vh clamp(28px, 4.5vw, 72px) 15vh;
+      display: grid;
+      grid-template-rows: repeat(5, 1fr);
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition:
+        opacity .38s ease,
+        transform .5s var(--ease),
+        visibility 0s linear .38s;
+      z-index: 6;
+    }
+
+    .stage.revealed:not(.info-mode) .projects {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+      transition:
+        opacity .38s ease,
+        transform .5s var(--ease),
+        visibility 0s linear 0s;
+    }
+
+    /* Hard lock: when collapsed, individual project controls cannot be
+       hovered, clicked, focused, or tabbed into through pointer interaction. */
+    .stage:not(.revealed) .project,
+    .stage.info-mode .project {
+      pointer-events: none !important;
+      visibility: hidden;
+    }
+
+    .project-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) clamp(250px, 30vw, 460px) minmax(0, 1fr);
+      align-items: center;
+      gap: 32px;
+      min-height: 78px;
+
+      /* IMPORTANT: the row itself cannot trigger anything */
+      pointer-events: none;
+    }
+
+    .project {
+      pointer-events: auto;
+      width: max-content;
+      max-width: 100%;
+      padding: 3px 0;
+      cursor: pointer;
+      font-size: clamp(17px, 1.45vw, 25px);
+      line-height: 1.15;
+      transition: opacity .2s ease, transform .25s var(--ease);
+    }
+
+    .project.en {
+      justify-self: start;
+      text-align: left;
+    }
+
+    .project.ar {
+      justify-self: end;
+      text-align: right;
+      direction: rtl;
+      font-family: "Geeza Pro", "Noto Naskh Arabic", Arial, sans-serif;
+    }
+
+    .stage.lang-en .project.en,
+    .stage.lang-en .axis-label.en { opacity: 1; }
+
+    .stage.lang-en .project.ar,
+    .stage.lang-en .axis-label.ar { opacity: .32; }
+
+    .stage.lang-ar .project.ar,
+    .stage.lang-ar .axis-label.ar { opacity: 1; }
+
+    .stage.lang-ar .project.en,
+    .stage.lang-ar .axis-label.en { opacity: .32; }
+
+    .project.is-paired {
+      opacity: 1 !important;
+    }
+
+    .project.en.is-paired { transform: translateX(7px); }
+    .project.ar.is-paired { transform: translateX(-7px); }
+
+    /* =====================================
+       CENTER PREVIEW
+       Media keeps its natural aspect ratio.
+    ====================================== */
+
+    .center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(48vw, 620px);
+      height: min(44vh, 450px);
+      transform: translate(-50%, -50%);
+      z-index: 8;
+      pointer-events: none;
+    }
+
+    .preview {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      opacity: 0;
+      transform: scale(.985);
+      pointer-events: none;
+      transition: opacity .25s ease, transform .35s var(--ease);
+    }
+
+    .preview.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Safety rule: previews can never remain visible when work is collapsed
+       or when the Fadi/about mode is active. */
+    .stage:not(.revealed):not(.info-mode) .preview {
+      opacity: 0 !important;
+      transform: scale(.985) !important;
+      visibility: hidden;
+    }
+
+    .stage.revealed:not(.info-mode) .preview.show,
+    .stage.info-mode .preview.show {
+      visibility: visible;
+    }
+
+    .preview-card {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      background: transparent;
+      transition: opacity .22s ease;
+    }
+
+    .preview-card.active {
+      opacity: 1;
+    }
+
+    .preview-card::before {
+      display: none;
+    }
+
+    /* Images NEVER crop. Their original shape is preserved. */
+    .preview-card img {
+      display: block;
+      position: relative;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      opacity: .95;
+
+      /* Very light blur so the preview sits behind your name instead of
+         fighting with it visually. */
+      filter: none;
+      transition:
+        filter .28s ease,
+        transform .28s ease,
+        opacity .28s ease;
+    }
+
+    /* While the specific project is actively hovered, bring it a little
+       closer to focus, but keep a tiny amount of softness. */
+    .preview-card.active img {
+      filter: none;
+    }
+
+    /* Paul Tazewell should carry less visual weight than the other previews. */
+    .preview-card[data-preview="tazewell"] img {
+      max-width: 74%;
+      max-height: 74%;
+    }
+    .preview-card[data-preview="adam"] img {
+      max-width: 78%;
+      max-height: 78%;
+    }
+
+    /* Wayfinding should remain wide/horizontal when you replace the current
+       thumbnail with a better system or kiosk image. */
+    .preview-card[data-preview="wayfinding"] img {
+      max-width: 92%;
+      max-height: 82%;
+    }
+
+    /* Fadi mode preview sizing */
+    .preview-card[data-preview="about"] img {
+      max-width: 62%;
+      max-height: 72%;
+    }
+
+    .preview-card[data-preview="artist-statement"] img {
+      max-width: 68%;
+      max-height: 72%;
+    }
+
+    /* The YouTube preview is also kept horizontal. */
+    .preview-card.video-card video {
+      position: relative;
+      display: block;
+      width: min(75%, 460px);
+      height: auto;
+      max-height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      background: #000;
+      opacity: .95;
+      filter: none;
+    }
+
+    /* =====================================
+       NAME — ALWAYS VISIBLE
+       No box/background around it.
+    ====================================== */
+
+    .identity {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 30;
+      pointer-events: auto;
+    }
+
+    .identity-button {
+      position: relative;
+      display: inline-grid;
+      place-items: center;
+      min-width: max-content;
+      padding: 0;
+      cursor: pointer;
+      font-size: clamp(24px, 2.5vw, 44px);
+      font-weight: 400;
+      line-height: 1.1;
+
+      background: transparent;
+      color: var(--ink);
+      border: 0;
+      outline: none;
+
+      transition:
+        color .18s ease,
+        transform .2s ease,
+        opacity .2s ease;
+    }
+
+    .identity-button:hover {
+      background: transparent;
+      transform: scale(1.015);
+    }
+
+    /* No browser rectangle; keyboard users still get a subtle cue. */
+    .identity-button:focus {
+      outline: none;
+    }
+
+    .identity-button:focus-visible {
+      outline: none;
+    }
+
+    .identity-name.ar {
+      font-family: "Geeza Pro", "Noto Naskh Arabic", Arial, sans-serif;
+      direction: rtl;
+    }
+
+    .stage.lang-en .identity-name.en { display: block; }
+    .stage.lang-en .identity-name.ar { display: none; }
+    .stage.lang-ar .identity-name.en { display: none; }
+    .stage.lang-ar .identity-name.ar { display: block; }
+
+    /*
+      Name contrast:
+      JS switches these classes according to the active project.
+    */
+    .identity-button.name-light {
+      color: #fff;
+    }
+
+    .identity-button.name-dark {
+      color: #111;
+    }
+
+    /* =====================================
+       FADI / PERSONAL MODE
+       Arabic navigation at top, English at bottom.
+    ====================================== */
+
+    .info-nav {
+      position: absolute;
+      left: clamp(28px, 4vw, 64px);
+      right: clamp(28px, 4vw, 64px);
+      z-index: 40;
+
+      display: flex;
+      justify-content: center;
+      gap: clamp(24px, 4vw, 64px);
+
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+
+      transition:
+        opacity .28s ease,
+        visibility .28s ease;
+    }
+
+    .info-nav.top {
+      top: clamp(28px, 6vh, 62px);
+    }
+
+    .info-nav.bottom {
+      bottom: clamp(28px, 6vh, 62px);
+    }
+
+    .info-link {
+      width: max-content;
+      padding: 0;
+      text-decoration: none;
+      cursor: pointer;
+      border: 0;
+      font-size: clamp(17px, 1.35vw, 23px);
+      transition: opacity .22s ease;
+    }
+
+    .info-link:hover {
+      opacity: .6;
+    }
+
+    .info-nav.ar {
+      direction: rtl;
+      font-family: "Geeza Pro", "Noto Naskh Arabic", Arial, sans-serif;
+    }
+
+    /* Entering Fadi mode collapses work completely */
+    .stage.info-mode .projects {
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+    }
+
+    .stage.info-mode .axis-row {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .stage.info-mode .info-nav {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /*
+      In Fadi mode, language is vertical:
+      TOP = English
+      BOTTOM = Arabic
+    */
+    .stage.info-mode.info-en .info-nav.en {
+      opacity: 1;
+    }
+
+    .stage.info-mode.info-en .info-nav.ar {
+      opacity: .28;
+    }
+
+    .stage.info-mode.info-ar .info-nav.ar {
+      opacity: 1;
+    }
+
+    .stage.info-mode.info-ar .info-nav.en {
+      opacity: .28;
+    }
+
+    /* In Fadi mode, the center name follows the vertical language state:
+       TOP = English, BOTTOM = Arabic */
+    .stage.info-mode.info-en .identity-name.en {
+      display: block !important;
+    }
+
+    .stage.info-mode.info-en .identity-name.ar {
+      display: none !important;
+    }
+
+    .stage.info-mode.info-ar .identity-name.en {
+      display: none !important;
+    }
+
+    .stage.info-mode.info-ar .identity-name.ar {
+      display: block !important;
+    }
+
+    /* =====================================
+       MOBILE
+    ====================================== */
+
+    @media (max-width: 760px) {
+      body { overflow: auto; }
+
+      .stage {
+        height: auto;
+        min-height: 100svh;
+        padding: 28px 22px;
+        overflow: visible;
+      }
+
+      .axis-row {
+        left: 22px;
+        right: 22px;
+      }
+
+      .axis-row.top { top: 30px; }
+      .axis-row.bottom { bottom: 30px; }
+
+      .axis-line { display: none; }
+
+      .projects {
+        position: relative;
+        inset: auto;
+        margin: 150px 0 140px;
+        gap: 18px;
+      }
+
+      .project-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        min-height: 64px;
+      }
+
+      .project.en { grid-column: 1; }
+      .project.ar { grid-column: 2; }
+
+      .project-row > span { display: none; }
+
+      .center {
+        position: fixed;
+        width: 64vw;
+        height: 36vh;
+        max-width: 440px;
+        z-index: 4;
+      }
+
+      .identity {
+        position: fixed;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+  <main class="stage lang-en" id="stage">
+
+    <!-- ART -->
+    <div class="axis-row top">
+      <button class="axis-label en" data-side="en">art</button>
+      <div class="axis-line"></div>
+      <button class="axis-label ar" data-side="ar">فن</button>
+    </div>
+
+    <!-- PROJECTS -->
+    <section class="projects" aria-label="Selected projects">
+
+      <div class="project-row" data-project="memory">
+        <button class="project en">memory in derealization</button>
+        <span></span>
+        <button class="project ar">الذاكرة في حالة تبدد الواقع</button>
+      </div>
+
+      <div class="project-row" data-project="adam">
+        <button class="project en">adam</button>
+        <span></span>
+        <button class="project ar">آدم</button>
+      </div>
+
+      <div class="project-row" data-project="tazewell">
+        <button class="project en">the costumes of paul tazewell renderings</button>
+        <span></span>
+        <button class="project ar">تصييرات ثلاثية الأبعاد لمعرض تصاميم بول تازويل</button>
+      </div>
+
+      <div class="project-row" data-project="wayfinding">
+        <button class="project en">wayfinding system design</button>
+        <span></span>
+        <button class="project ar">تصميم نظام إرشاد وتنقّل</button>
+      </div>
+
+      <div class="project-row" data-project="cad">
+        <button class="project en">3ds Max &amp; AutoCAD</button>
+        <span></span>
+        <button class="project ar">3ds Max و AutoCAD</button>
+      </div>
+
+    </section>
+
+    <!-- CENTER PREVIEWS -->
+    <div class="center" aria-hidden="true">
+      <div class="preview" id="preview">
+
+        <div class="preview-card has-media" data-preview="memory" data-name-color="light">
+          <img
+            src="images/memory_in_derealization.jpg"
+            alt="Memory in Derealization preview"
+          />
+        </div>
+
+        <div class="preview-card has-media" data-preview="adam" data-name-color="light">
+          <img
+            src="images/adam.png"
+            alt="Adam preview"
+          />
+        </div>
+
+        <div class="preview-card has-media" data-preview="tazewell" data-name-color="light">
+          <img
+            src="images/the_costumes_of_paul_tazewell.jpg"
+            alt="The Costumes of Paul Tazewell renderings preview"
+          />
+        </div>
+
+        <div class="preview-card has-media" data-preview="wayfinding" data-name-color="light">
+          <!-- SWAP THIS FILE when you choose the final wayfinding thumbnail.
+               Best choice: a wide kiosk/system image, not a single phone screen. -->
+          <img
+            src="images/wayfinding_system_design.png"
+            alt="Wayfinding System Design preview"
+          />
+        </div>
+
+        <div class="preview-card has-media video-card" data-preview="cad" data-name-color="light">
+          <video
+            id="lampVideo"
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          >
+            <source src="video/lamp360.mp4" type="video/mp4" />
+          </video>
+        </div>
+
+        <!-- FADI MODE PREVIEWS -->
+        <div class="preview-card has-media info-preview" data-preview="about" data-name-color="light">
+          <img
+            src="images/about.jpeg"
+            alt="About preview"
+          />
+        </div>
+
+        <div class="preview-card has-media info-preview" data-preview="artist-statement" data-name-color="light">
+          <img
+            src="images/artist_statement.png"
+            alt="Artist Statement preview"
+          />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- NAME ALWAYS SITS ABOVE PREVIEW -->
+    <div class="identity">
+      <button class="identity-button" id="identityButton" aria-expanded="false">
+        <span class="identity-name en">Fadi Azra</span>
+        <span class="identity-name ar">فادي عذرا</span>
+      </button>
+    </div>
+
+    <!-- FADI MODE: ENGLISH TOP -->
+    <nav class="info-nav top en" aria-label="Personal navigation in English">
+      <a class="info-link" href="#contact" data-info="contact">contact</a>
+      <a class="info-link" href="#artist-statement" data-info="artist-statement">artist statement</a>
+      <a class="info-link" href="#about" data-info="about">about</a>
+    </nav>
+
+    <!-- FADI MODE: ARABIC BOTTOM -->
+    <nav class="info-nav bottom ar" aria-label="Personal navigation in Arabic">
+      <a class="info-link" href="#contact" data-info="contact">تواصل</a>
+      <a class="info-link" href="#artist-statement" data-info="artist-statement">بيان الفنان</a>
+      <a class="info-link" href="#about" data-info="about">عني</a>
+    </nav>
+
+    <!-- ENGINEERING -->
+    <div class="axis-row bottom">
+      <button class="axis-label en" data-side="en">engineering</button>
+      <div class="axis-line"></div>
+      <button class="axis-label ar" data-side="ar">هندسة</button>
+    </div>
+
+  </main>
+
+  <script>
+    const stage = document.getElementById("stage");
+    const preview = document.getElementById("preview");
+    const previewCards = [...document.querySelectorAll(".preview-card")];
+    const projectRows = [...document.querySelectorAll(".project-row")];
+    const axisRows = [...document.querySelectorAll(".axis-row")];
+
+    const identityButton = document.getElementById("identityButton");
+    const lampVideo = document.getElementById("lampVideo");
+
+    function clearProjectPreview() {
+      preview.classList.remove("show");
+      previewCards.forEach(card => card.classList.remove("active"));
+      document.querySelectorAll(".project.is-paired")
+        .forEach(el => el.classList.remove("is-paired"));
+
+      if (lampVideo) {
+        lampVideo.pause();
+        lampVideo.currentTime = 0;
+      }
+      setNameContrast("dark");
+    }
+
+    function clearInfoPreview() {
+      preview.classList.remove("show");
+      previewCards.forEach(card => {
+        if (card.classList.contains("info-preview")) {
+          card.classList.remove("active");
+        }
+      });
+      setNameContrast("dark");
+    }
+
+    function showInfoPreview(key) {
+      if (!stage.classList.contains("info-mode")) return;
+
+      // Contact intentionally has no image.
+      if (key === "contact") {
+        clearInfoPreview();
+        return;
+      }
+
+      let activeCard = null;
+
+      previewCards.forEach(card => {
+        if (!card.classList.contains("info-preview")) return;
+
+        const isActive = card.dataset.preview === key;
+        card.classList.toggle("active", isActive);
+
+        if (isActive) activeCard = card;
+      });
+
+      if (!activeCard) {
+        clearInfoPreview();
+        return;
+      }
+
+      preview.classList.add("show");
+      setNameContrast(activeCard.dataset.nameColor || "dark");
+    }
+
+    function setNameContrast(mode = "dark") {
+      identityButton.classList.toggle("name-light", mode === "light");
+      identityButton.classList.toggle("name-dark", mode !== "light");
+    }
+
+    // Default state: black name on the plain light page.
+    setNameContrast("dark");
+
+
+    // Art / Engineering are now toggles:
+    // click once = reveal projects
+    // click again = collapse projects
+    document.querySelectorAll(".axis-label").forEach(label => {
+      label.addEventListener("click", (event) => {
+        event.stopPropagation();
+
+        // If we are in Fadi/info mode, return to work mode first.
+        if (stage.classList.contains("info-mode")) {
+          stage.classList.remove("info-mode", "info-ar", "info-en");
+          stage.classList.add("revealed");
+          identityButton.setAttribute("aria-expanded", "false");
+          return;
+        }
+
+        stage.classList.toggle("revealed");
+
+        // When collapsing, also clear any active preview/highlight.
+        if (!stage.classList.contains("revealed")) {
+          clearProjectPreview();
+
+          if (document.activeElement &&
+              document.activeElement.classList &&
+              document.activeElement.classList.contains("project")) {
+            document.activeElement.blur();
+          }
+        }
+      });
+    });
+
+    // Language logic changes depending on mode.
+    //
+    // WORK MODE:
+    // left = English, right = Arabic
+    //
+    // FADI MODE:
+    // top = Arabic, bottom = English
+    window.addEventListener("pointermove", (event) => {
+      if (stage.classList.contains("info-mode")) {
+        const y = event.clientY / window.innerHeight;
+
+        if (y < 0.45) {
+          stage.classList.add("info-en");
+          stage.classList.remove("info-ar");
+        } else if (y > 0.55) {
+          stage.classList.add("info-ar");
+          stage.classList.remove("info-en");
+        }
+
+        return;
+      }
+
+      const x = event.clientX / window.innerWidth;
+
+      if (x < 0.45) {
+        stage.classList.add("lang-en");
+        stage.classList.remove("lang-ar");
+      } else if (x > 0.55) {
+        stage.classList.add("lang-ar");
+        stage.classList.remove("lang-en");
+      }
+    });
+
+    // Art / Engineering translation arrows.
+    axisRows.forEach(row => {
+      const en = row.querySelector(".axis-label.en");
+      const ar = row.querySelector(".axis-label.ar");
+
+      function show(direction) {
+        row.classList.add("show-line");
+        row.classList.toggle("dir-right", direction === "right");
+        row.classList.toggle("dir-left", direction === "left");
+      }
+
+      function hide() {
+        row.classList.remove("show-line", "dir-right", "dir-left");
+      }
+
+      en.addEventListener("mouseenter", () => show("right"));
+      ar.addEventListener("mouseenter", () => show("left"));
+      en.addEventListener("mouseleave", hide);
+      ar.addEventListener("mouseleave", hide);
+    });
+
+    // Preview logic:
+    // ONLY the visible text itself triggers the preview.
+    projectRows.forEach(row => {
+      const key = row.dataset.project;
+      const english = row.querySelector(".project.en");
+      const arabic = row.querySelector(".project.ar");
+      const pair = [english, arabic];
+
+      function projectsAreOpen() {
+        return stage.classList.contains("revealed") &&
+               !stage.classList.contains("info-mode");
+      }
+
+      function showProject() {
+        // Absolute guard: collapsed projects do NOTHING.
+        if (!projectsAreOpen()) {
+          clearProjectPreview();
+          return;
+        }
+
+        let activeCard = null;
+
+        previewCards.forEach(card => {
+          const isActive = card.dataset.preview === key;
+          card.classList.toggle("active", isActive);
+          if (isActive) activeCard = card;
+        });
+
+        pair.forEach(el => el.classList.add("is-paired"));
+        preview.classList.add("show");
+
+        if (activeCard) {
+          setNameContrast(activeCard.dataset.nameColor || "dark");
+        }
+
+        if (key === "cad" && lampVideo) {
+          lampVideo.currentTime = 0;
+          lampVideo.play().catch(() => {});
+        }
+      }
+
+      function hideProject() {
+        if (!projectsAreOpen()) {
+          clearProjectPreview();
+          return;
+        }
+
+        pair.forEach(el => el.classList.remove("is-paired"));
+        preview.classList.remove("show");
+        previewCards.forEach(card => card.classList.remove("active"));
+
+        // Return to black when the page has no thumbnail behind the name.
+        setNameContrast("dark");
+
+        if (key === "cad" && lampVideo) {
+          lampVideo.pause();
+          lampVideo.currentTime = 0;
+        }
+      }
+
+      pair.forEach(el => {
+        el.addEventListener("mouseenter", showProject);
+        el.addEventListener("mouseleave", hideProject);
+
+        // Project click target is also just the visible text.
+        el.addEventListener("click", event => {
+          event.stopPropagation();
+
+          // Collapsed projects are not valid click targets.
+          if (!projectsAreOpen()) return;
+
+          // Placeholder for project-page navigation.
+          console.log("Open project:", key);
+        });
+      });
+    });
+
+    // Clicking the name toggles between:
+    // 1) Art / Engineering work mode
+    // 2) Fadi personal-info mode
+    identityButton.addEventListener("click", event => {
+      event.stopPropagation();
+
+      const enteringInfoMode = !stage.classList.contains("info-mode");
+
+      if (enteringInfoMode) {
+        // Collapse all work.
+        stage.classList.add("info-mode", "info-en");
+        stage.classList.remove("info-ar", "revealed");
+
+        // Hide any active project preview.
+        clearProjectPreview();
+
+        identityButton.setAttribute("aria-expanded", "true");
+      } else {
+        // Return to the clean Art / Engineering landing state.
+        clearInfoPreview();
+        stage.classList.remove("info-mode", "info-ar", "info-en");
+        identityButton.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    // Personal links:
+    // about / artist statement show center previews;
+    // contact intentionally shows no image.
+    document.querySelectorAll(".info-link").forEach(link => {
+      const key = link.dataset.info;
+
+      link.addEventListener("mouseenter", () => {
+        showInfoPreview(key);
+      });
+
+      link.addEventListener("mouseleave", () => {
+        clearInfoPreview();
+      });
+
+      link.addEventListener("click", event => {
+        event.stopPropagation();
+      });
+    });
+  </script>
+</body>
+</html>
