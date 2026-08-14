@@ -71,9 +71,11 @@ body {
 .about-title {
   margin: 0;
 
+  display: grid;
+  place-items: center;
+
   font-size: clamp(38px, 3.5vw, 60px);
   line-height: 1;
-
   font-weight: 400;
 }
 
@@ -114,10 +116,52 @@ body {
   min-height: 100vh;
 
   padding:
-    20vh
+    3vh
     7vw
     22vh;
+}
 
+.about-heading {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-bottom: 16vh;
+}
+
+.about-name {
+  margin: 0;
+
+  display: grid;
+
+  font-size: clamp(28px, 3vw, 48px);
+  line-height: 1;
+  font-weight: 400;
+}
+
+.about-name-en,
+.about-name-ar {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+}
+
+.about-name-en {
+  opacity: 1;
+}
+
+.about-name-ar {
+  opacity: 0;
+
+  direction: rtl;
+  text-align: right;
+
+  font-family:
+    "Geeza Pro",
+    "Noto Naskh Arabic",
+    Arial,
+    sans-serif;
+}
+
+.about-grid {
   display: grid;
 
   grid-template-columns:
@@ -128,7 +172,6 @@ body {
 
   align-items: start;
 }
-
 
 /* al bayadiyah */
 
@@ -245,17 +288,18 @@ body {
   }
 
 
-  .about-content {
-    min-height: auto;
+.about-content {
+  min-height: auto;
 
-    padding:
-      16vh
-      7vw
-      18vh;
+  padding:
+    16vh
+    7vw
+    18vh;
+}
 
-    display: block;
-  }
-
+.about-grid {
+  display: block;
+}
 
   .about-role {
     margin-top: 3vh;
@@ -317,7 +361,13 @@ body {
 
 
 /* Hovering the village image switches the title */
+.about-page:has(.about-origin img:hover) .about-name-en {
+  opacity: 0;
+}
 
+.about-page:has(.about-origin img:hover) .about-name-ar {
+  opacity: 1;
+}
 .about-page:has(.about-origin img:hover) .about-title-en {
   opacity: 0;
 }
