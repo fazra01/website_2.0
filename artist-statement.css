@@ -111,6 +111,131 @@ body {
 -webkit-background-clip: text;
 background-clip: text;
 }
+/* Arabic state triggered by hovering the lyric */
+/* =====================================
+   ARABIC HOVER SWITCH
+===================================== */
+
+.language-switch-title,
+.statement-name {
+  position: relative;
+  display: grid;
+}
+
+.language-switch-title .switch-en,
+.language-switch-title .switch-ar,
+.statement-name .switch-en,
+.statement-name .switch-ar {
+  grid-area: 1 / 1;
+}
+
+
+/* Keep the existing gradient behavior on BOTH languages */
+
+.language-switch-title .switch-en,
+.language-switch-title .switch-ar {
+  color: transparent;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #fff 0,
+      #fff var(--split),
+      #111 var(--split),
+      #111 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+
+.language-switch-title .switch-ar,
+.statement-name .switch-ar {
+  font-family:
+    "Geeza Pro",
+    "Noto Naskh Arabic",
+    Arial,
+    sans-serif;
+
+  direction: rtl;
+}
+
+
+/* Arabic title stays aligned where English title was */
+
+.language-switch-title .switch-ar {
+  text-align: left;
+}
+
+
+/* Name stays aligned on the right */
+
+.statement-name .switch-ar {
+  text-align: right;
+}
+
+
+/* Default language */
+
+.switch-en {
+  opacity: 1;
+}
+
+.switch-ar {
+  opacity: 0;
+}
+
+
+/* Arabic state */
+
+body.artist-arabic .statement-name .switch-en {
+  opacity: 0;
+}
+
+body.artist-arabic .statement-name .switch-ar {
+  opacity: 1;
+}
+
+/* Small controlled flicker */
+
+.artist-language-flicker .language-switch-title,
+.artist-language-flicker .statement-name {
+  animation: languageFlicker 180ms linear;
+}
+
+
+@keyframes languageFlicker {
+
+  0% {
+    opacity: 1;
+  }
+
+  30% {
+    opacity: 0.12;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  68% {
+    opacity: 0.25;
+  }
+
+  100% {
+    opacity: 1;
+  }
+
+}
+
+
+/* ONLY the actual lyric is hoverable */
+
+.lyric-hover-target {
+  display: inline-block;
+  cursor: default;
+}
 /* =====================================
    IMAGE
 
@@ -197,7 +322,112 @@ background-clip: text;
   font-size: 0.72em;
 
 }
+/* =====================================
+   ARABIC HOVER
+===================================== */
 
+.lyric-hover-target {
+  display: inline-block;
+}
+
+
+/* NAME — both versions occupy identical space */
+
+.artist-name {
+  position: relative;
+}
+
+.name-en {
+  display: block;
+}
+
+.name-ar {
+  position: absolute;
+  inset: 0;
+
+  opacity: 0;
+
+  direction: rtl;
+  text-align: right;
+
+  font-family:
+    "Geeza Pro",
+    "Noto Naskh Arabic",
+    Arial,
+    sans-serif;
+}
+
+
+/* Arabic replacement for the LEFT title */
+
+.title-en::after {
+  content: "بيان الفنان";
+
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  opacity: 0;
+
+  white-space: nowrap;
+
+  direction: rtl;
+
+  font-family:
+    "Geeza Pro",
+    "Noto Naskh Arabic",
+    Arial,
+    sans-serif;
+
+  color: #111;
+}
+
+
+/*
+  Needed so the Arabic replacement can
+  sit over the English title without moving it.
+*/
+
+.title-en {
+  position: relative;
+}
+
+
+/* LANGUAGE STATE */
+
+body.artist-arabic .title-en {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+
+  color: transparent;
+}
+
+body.artist-arabic .title-en::after {
+  opacity: 1;
+}
+
+body.artist-arabic .name-en {
+  opacity: 0;
+}
+
+body.artist-arabic .name-ar {
+  opacity: 1;
+}
+
+
+/* ONE very small flicker */
+
+body.artist-flicker .title-en,
+body.artist-flicker .statement-name {
+  animation: artistFlicker 120ms linear;
+}
+
+@keyframes artistFlicker {
+  0%   { opacity: 1; }
+  45%  { opacity: 0.18; }
+  100% { opacity: 1; }
+}
 .statement-text {
   max-width: 680px;
 

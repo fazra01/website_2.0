@@ -24,6 +24,15 @@ function initCurrentPage() {
     cleanupCurrentPage =
       window.initArtistStatementPage();
   }
+  if (
+  document.querySelector(".about-page") &&
+  window.initAboutPage
+) {
+  cleanupCurrentPage =
+    window.initAboutPage();
+
+  return;
+}
 }
 
 
