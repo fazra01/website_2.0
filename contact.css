@@ -1,0 +1,164 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  background: #f7f7f3;
+  color: #111;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+}
+
+body {
+  overflow: hidden;
+}
+
+
+/* =====================================
+   CONTACT
+===================================== */
+
+.contact-page {
+  width: 100vw;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/*
+  Compact two-column composition,
+  centered as one object in the viewport.
+*/
+
+.contact-layout {
+  width: min(82vw, 1120px);
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 420px)
+    minmax(200px, 1fr);
+
+  gap: clamp(70px, 9vw, 150px);
+
+  align-items: start;
+}
+
+
+/* VIDEO */
+
+.contact-video-wrap {
+  margin: 0;
+
+  display: flex;
+  justify-content: center;
+}
+
+.contact-video {
+  display: block;
+
+  width: min(100%, 470px);
+  height: auto;
+
+  max-height: 60vh;
+
+  object-fit: contain;
+}
+
+
+/* CONTACT INFO */
+
+.contact-info {
+  align-self: start;
+}
+
+.contact-label {
+  margin:
+    0
+    0
+    2.5vh;
+
+  font-size: clamp(28px, 2.5vw, 42px);
+  line-height: 1;
+
+  font-weight: 400;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  gap: 10px;
+}
+
+.contact-links a {
+  color: #111;
+
+  font-size: clamp(17px, 1.25vw, 21px);
+  line-height: 1.3;
+
+  text-decoration: none;
+}
+
+.contact-links a:hover {
+  font-style: italic;
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 760px) {
+
+  body {
+    overflow: auto;
+  }
+
+  .contact-page {
+    min-height: 100svh;
+
+    padding:
+      12vh
+      7vw;
+  }
+
+  .contact-layout {
+    width: 100%;
+
+    display: block;
+  }
+
+  .contact-video {
+    width: min(76vw, 380px);
+    max-height: none;
+  }
+
+  .contact-info {
+    margin-top: 10vh;
+  }
+
+}
+.contact-intro {
+  margin:
+    0
+    0
+    4vh;
+
+  max-width: 320px;
+
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.4;
+}
