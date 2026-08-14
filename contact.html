@@ -37,37 +37,73 @@
 
 
         <div class="contact-info">
-
-          <p class="contact-label">
-            contact
-          </p>
-            <p class="contact-text">
-                For inquiries, commissions, or collaborations, please reach out via email or connect with me on social media.
+           <p class="contact-text">
+            For inquiries, commissions, or collaborations, send me a message or connect with me on social media.
             </p>
-          <nav class="contact-links">
+          <form
+  class="contact-form"
+  id="contactForm"
+  action="https://formspree.io/f/xvkpqyla
+  method="POST"
+>
 
-            <a href="mailto:fadiazra8@gmail.com">
-              email
-            </a>
+  <label for="contactEmail">
+    your email
+  </label>
 
-            <a
-              href="https://www.instagram.com/fadi_azra_art"
-              target="_blank"
-              rel="noopener"
-            >
-              instagram
-            </a>
+  <input
+    id="contactEmail"
+    type="email"
+    name="email"
+    autocomplete="email"
+    required
+  >
 
-            <a
-              href="https://www.linkedin.com/in/fadi-azra-b62723335"
-              target="_blank"
-              rel="noopener"
-            >
-              linkedin
-            </a>
 
-          </nav>
+  <label for="contactMessage">
+    your message
+  </label>
 
+  <textarea
+    id="contactMessage"
+    name="message"
+    rows="3"
+    required
+  ></textarea>
+
+
+  <button type="submit">
+    send →
+  </button>
+
+  <p
+    class="contact-status"
+    id="contactStatus"
+    aria-live="polite"
+  ></p>
+
+</form>
+
+
+<nav class="contact-links">
+
+  <a
+    href="https://www.instagram.com/fadi_azra_art"
+    target="_blank"
+    rel="noopener"
+  >
+    instagram
+  </a>
+
+  <a
+    href="https://www.linkedin.com/in/fadi-azra-b62723335"
+    target="_blank"
+    rel="noopener"
+  >
+    linkedin
+  </a>
+
+</nav>
         </div>
 
       </section>

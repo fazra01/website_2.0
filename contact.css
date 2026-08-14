@@ -95,12 +95,13 @@ body {
 }
 
 .contact-links {
+  margin-top: 3vh;
+
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 
-  align-items: flex-start;
-
-  gap: 10px;
+  gap: 24px;
+  align-items: center;
 }
 
 .contact-links a {
@@ -115,7 +116,105 @@ body {
 .contact-links a:hover {
   font-style: italic;
 }
+/* =====================================
+   CONTACT FORM
+===================================== */
 
+.contact-form {
+  width: 100%;
+  max-width: 360px;
+
+  margin-top: 3vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form label {
+  margin-bottom: 4px;
+
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+
+  padding: 5px 0;
+
+  margin-bottom: 2.2vh;
+
+  border: 0;
+  border-bottom: 1px solid #aaa;
+  border-radius: 0;
+
+  outline: none;
+
+  background: transparent;
+  color: #111;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+
+  font-size: 17px;
+}
+
+.contact-form textarea {
+  height: 58px;
+  resize: none;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-bottom-color: #111;
+}
+
+.contact-form button {
+  align-self: flex-start;
+
+  margin-top: 0.5vh;
+
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: #111;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+
+  font-size: 17px;
+
+  cursor: pointer;
+}
+
+.contact-form button:hover {
+  font-style: italic;
+}
+
+.contact-status {
+  min-height: 0;
+
+  margin: 1vh 0 0;
+
+  font-size: 14px;
+}
+
+.contact-links {
+  margin-top: 3vh;
+
+  display: flex;
+  flex-direction: row;
+
+  gap: 24px;
+  align-items: center;
+}
 
 /* =====================================
    MOBILE
