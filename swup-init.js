@@ -1,3 +1,347 @@
+function initPaintingsPage() {
+  const gallery =
+    document.getElementById("paintingsGallery");
+
+  if (!gallery) {
+    return function () {};
+  }
+
+
+  const slides = [
+    ...gallery.querySelectorAll(".painting-slide")
+  ];
+
+  const images = [
+    ...gallery.querySelectorAll(".painting-image")
+  ];
+
+  const metaTitle =
+    document.getElementById("paintingMetaTitle");
+
+  const metaDetails =
+    document.getElementById("paintingMetaDetails");
+
+  const counter =
+    document.getElementById("paintingCounter");
+
+  const lightbox =
+    document.getElementById("paintingLightbox");
+
+  const lightboxImage =
+    document.getElementById("paintingLightboxImage");
+
+  const closeButton =
+    lightbox.querySelector(
+      ".painting-lightbox-close"
+    );
+
+
+  let activeIndex = 0;
+  let scrollFrame = null;
+
+
+  /* =====================================
+     UPDATE CURRENT WORK
+  ===================================== */
+
+  function updatePaintingInfo() {
+
+    const width =
+      gallery.clientWidth || window.innerWidth;
+
+    const nextIndex = Math.max(
+      0,
+      Math.min(
+        slides.length - 1,
+        Math.round(
+          gallery.scrollLeft / width
+        )
+      )
+    );
+
+
+    activeIndex = nextIndex;
+
+    const slide =
+      slides[activeIndex];
+
+
+    metaTitle.textContent =
+      slide.dataset.title || "";
+
+    metaDetails.textContent =
+      slide.dataset.details || "";
+
+
+    counter.textContent =
+      `${String(activeIndex + 1).padStart(2, "0")}` +
+      `/` +
+      `${String(slides.length).padStart(2, "0")}`;
+  }
+
+
+  function handleScroll() {
+
+    if (scrollFrame) {
+      cancelAnimationFrame(scrollFrame);
+    }
+
+    scrollFrame =
+      requestAnimationFrame(
+        updatePaintingInfo
+      );
+
+  }
+
+
+  /* =====================================
+     MOUSE WHEEL → HORIZONTAL MOVEMENT
+  ===================================== */
+
+  function handleWheel(event) {
+
+    /*
+      Normal trackpad horizontal gestures still work.
+      Vertical mouse-wheel movement becomes horizontal.
+    */
+
+    if (
+      Math.abs(event.deltaY) >
+      Math.abs(event.deltaX)
+    ) {
+
+      event.preventDefault();
+
+      gallery.scrollLeft +=
+        event.deltaY;
+
+    }
+
+  }
+
+
+  /* =====================================
+     KEYBOARD
+  ===================================== */
+
+  function goToPainting(index) {
+
+    const clampedIndex =
+      Math.max(
+        0,
+        Math.min(
+          slides.length - 1,
+          index
+        )
+      );
+
+
+    gallery.scrollTo({
+      left:
+        clampedIndex *
+        gallery.clientWidth,
+
+      behavior: "smooth"
+    });
+
+  }
+
+
+  function handleKeydown(event) {
+
+    if (lightbox.classList.contains("open")) {
+
+      if (event.key === "Escape") {
+        closeLightbox();
+      }
+
+      return;
+    }
+
+
+    if (event.key === "ArrowRight") {
+
+      event.preventDefault();
+
+      goToPainting(
+        activeIndex + 1
+      );
+
+    }
+
+
+    if (event.key === "ArrowLeft") {
+
+      event.preventDefault();
+
+      goToPainting(
+        activeIndex - 1
+      );
+
+    }
+
+  }
+
+
+  /* =====================================
+     ZOOM
+  ===================================== */
+
+  function openLightbox(event) {
+
+    const image =
+      event.currentTarget;
+
+    lightboxImage.src =
+      image.src;
+
+    lightboxImage.alt =
+      image.alt;
+
+    lightbox.classList.add(
+      "open"
+    );
+
+    lightbox.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+  }
+
+
+  function closeLightbox() {
+
+    lightbox.classList.remove(
+      "open"
+    );
+
+    lightbox.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    lightboxImage.removeAttribute(
+      "src"
+    );
+
+  }
+
+
+  function handleLightboxClick(event) {
+
+    if (
+      event.target === lightbox ||
+      event.target === lightboxImage
+    ) {
+      closeLightbox();
+    }
+
+  }
+
+
+  /* =====================================
+     LISTENERS
+  ===================================== */
+
+  gallery.addEventListener(
+    "scroll",
+    handleScroll,
+    { passive: true }
+  );
+
+
+  gallery.addEventListener(
+    "wheel",
+    handleWheel,
+    { passive: false }
+  );
+
+
+  window.addEventListener(
+    "keydown",
+    handleKeydown
+  );
+
+
+  images.forEach(image => {
+
+    image.addEventListener(
+      "click",
+      openLightbox
+    );
+
+  });
+
+
+  lightbox.addEventListener(
+    "click",
+    handleLightboxClick
+  );
+
+
+  closeButton.addEventListener(
+    "click",
+    closeLightbox
+  );
+
+
+  updatePaintingInfo();
+
+
+  /* =====================================
+     SWUP CLEANUP
+  ===================================== */
+
+  return function cleanupPaintingsPage() {
+
+    if (scrollFrame) {
+      cancelAnimationFrame(scrollFrame);
+    }
+
+
+    gallery.removeEventListener(
+      "scroll",
+      handleScroll
+    );
+
+
+    gallery.removeEventListener(
+      "wheel",
+      handleWheel
+    );
+
+
+    window.removeEventListener(
+      "keydown",
+      handleKeydown
+    );
+
+
+    images.forEach(image => {
+
+      image.removeEventListener(
+        "click",
+        openLightbox
+      );
+
+    });
+
+
+    lightbox.removeEventListener(
+      "click",
+      handleLightboxClick
+    );
+
+
+    closeButton.removeEventListener(
+      "click",
+      closeLightbox
+    );
+
+  };
+}
+
 function initContactPage() {
   const form =
     document.getElementById("contactForm");
@@ -123,6 +467,15 @@ if (
 
   cleanupCurrentPage =
     initContactPage();
+
+  return;
+}
+if (
+  document.querySelector(".paintings-page")
+) {
+
+  cleanupCurrentPage =
+    initPaintingsPage();
 
   return;
 }

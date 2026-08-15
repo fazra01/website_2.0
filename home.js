@@ -307,9 +307,21 @@ window.initHomePage = function () {
             // Collapsed projects are not valid click targets.
             if (!projectsAreOpen()) return;
 
-            // Placeholder for project-page navigation.
+            
+            if (key === "memory") {
+
+                if (typeof swup !== "undefined") {
+                    swup.navigate("paintings.html");
+                } else {
+                    window.location.href =
+                    "paintings.html";
+                }
+
+                return;
+            }
+
             console.log("Open project:", key);
-            });
+        });
         });
         });
 

@@ -112,7 +112,9 @@ body {
 
   text-decoration: none;
 }
-
+.contact-links a:first-child {
+  width: 5.2em;
+}
 .contact-links a:hover {
   font-style: italic;
 }
@@ -215,7 +217,14 @@ body {
   gap: 24px;
   align-items: center;
 }
+.contact-text {
+  margin: 0 0 3vh;
 
+  max-width: 380px;
+
+  font-size: clamp(18px, 1.25vw, 21px);
+  line-height: 1.3;
+}
 /* =====================================
    MOBILE
 ===================================== */

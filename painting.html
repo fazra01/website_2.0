@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Memory in Derealization — Fadi Azra</title>
+
+  <link rel="stylesheet" href="paintings.css">
+  <link rel="stylesheet" href="transitions.css">
+</head>
+
+<body>
+
+<div id="swup" class="transition-fade">
+
+  <main class="paintings-page">
+
+    <section
+      class="paintings-gallery"
+      id="paintingsGallery"
+      aria-label="Memory in Derealization paintings"
+    >
+
+      <!-- 01 -->
+      <article
+        class="painting-slide"
+        data-title="Within a Picture on the Wall"
+        data-details="oil on canvas, 22 × 28 in."
+      >
+        <img
+          class="painting-image"
+          src="images/painting1.jpeg"
+          alt="Within a Picture on the Wall"
+        >
+      </article>
+
+
+      <!-- 02 -->
+      <article
+        class="painting-slide"
+        data-title="Untitled"
+        data-details="oil on canvas, 48 × 60 in."
+      >
+        <img
+          class="painting-image"
+          src="images/untitled2.png"
+          alt="Untitled"
+        >
+      </article>
+
+
+      <!-- 03 -->
+      <article
+        class="painting-slide"
+        data-title="The Two of Me"
+        data-details="oil on canvas, 30 × 40 in."
+      >
+        <img
+          class="painting-image"
+          src="images/painting5.jpg"
+          alt="The Two of Me"
+        >
+      </article>
+
+
+      <!-- 04 -->
+      <article
+        class="painting-slide"
+        data-title="Untitled 2"
+        data-details="oil on canvas"
+      >
+        <img
+          class="painting-image"
+          src="images/painting2.jpeg"
+          alt="Untitled 2"
+        >
+      </article>
+
+
+      <!-- 05 -->
+      <article
+        class="painting-slide"
+        data-title="A Picture on the Wall"
+        data-details="oil on canvas"
+      >
+        <img
+          class="painting-image"
+          src="images/painting3.jpeg"
+          alt="A Picture on the Wall"
+        >
+      </article>
+
+
+      <!-- 06 -->
+      <article
+        class="painting-slide"
+        data-title="The Protest"
+        data-details="oil on canvas, 36 × 48 in."
+      >
+        <img
+          class="painting-image"
+          src="images/painting4.jpeg"
+          alt="The Protest"
+        >
+      </article>
+
+
+      <!-- 07 -->
+      <article
+        class="painting-slide"
+        data-title="Mother of a Protest"
+        data-details="oil on canvas, 36 × 48 in."
+      >
+        <img
+          class="painting-image"
+          src="images/painting6.jpeg"
+          alt="Mother of a Protest"
+        >
+      </article>
+
+
+      <!-- 08 -->
+      <article
+        class="painting-slide"
+        data-title="With Pictures on a Wall"
+        data-details="oil on canvas, 48 × 36 in."
+      >
+        <img
+          class="painting-image"
+          src="images/painting7.jpeg"
+          alt="With Pictures on a Wall"
+        >
+      </article>
+
+
+      <!-- 09 -->
+      <article
+        class="painting-slide"
+        data-title="Trip to Germany"
+        data-details="oil on canvas, 36 × 48 in."
+      >
+        <img
+          class="painting-image"
+          src="images/painting8.jpeg"
+          alt="Trip to Germany"
+        >
+      </article>
+
+    </section>
+
+
+    <!-- BOTTOM LEFT — changes with current painting -->
+    <aside class="painting-meta" aria-live="polite">
+
+      <p
+        class="painting-meta-title"
+        id="paintingMetaTitle"
+      ></p>
+
+      <p
+        class="painting-meta-details"
+        id="paintingMetaDetails"
+      ></p>
+
+    </aside>
+
+
+    <!-- BOTTOM RIGHT -->
+    <div
+      class="painting-counter"
+      id="paintingCounter"
+      aria-live="polite"
+    >
+      01/09
+    </div>
+
+
+    <!-- ZOOM -->
+    <div
+      class="painting-lightbox"
+      id="paintingLightbox"
+      aria-hidden="true"
+    >
+
+      <button
+        class="painting-lightbox-close"
+        type="button"
+        aria-label="Close enlarged painting"
+      >
+        ×
+      </button>
+
+      <img
+        id="paintingLightboxImage"
+        alt=""
+      >
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<script src="https://unpkg.com/swup@4"></script>
+<script src="https://unpkg.com/@swup/head-plugin@2"></script>
+
+<script src="home.js"></script>
+<script src="artist-statement.js"></script>
+<script src="swup-init.js"></script>
+
+</body>
+</html>
