@@ -15,15 +15,29 @@
 
 <div id="swup" class="transition-fade">
 
-  <main class="paintings-page">
+  <main class="paintings-page mode-strip">
 
+    <!-- SERIES TITLE -->
+    <header class="series-heading">
+
+      <h1 class="series-title-en">
+        memory in derealization
+      </h1>
+
+      <h1 class="series-title-ar">
+        الذاكرة في حالة تبدد الواقع
+      </h1>
+
+    </header>
+
+
+    <!-- HORIZONTAL WORKS -->
     <section
       class="paintings-gallery"
       id="paintingsGallery"
       aria-label="Memory in Derealization paintings"
     >
 
-      <!-- 01 -->
       <article
         class="painting-slide"
         data-title="Within a Picture on the Wall"
@@ -37,7 +51,6 @@
       </article>
 
 
-      <!-- 02 -->
       <article
         class="painting-slide"
         data-title="Untitled"
@@ -51,7 +64,6 @@
       </article>
 
 
-      <!-- 03 -->
       <article
         class="painting-slide"
         data-title="The Two of Me"
@@ -65,7 +77,6 @@
       </article>
 
 
-      <!-- 04 -->
       <article
         class="painting-slide"
         data-title="Untitled 2"
@@ -79,7 +90,6 @@
       </article>
 
 
-      <!-- 05 -->
       <article
         class="painting-slide"
         data-title="A Picture on the Wall"
@@ -93,7 +103,6 @@
       </article>
 
 
-      <!-- 06 -->
       <article
         class="painting-slide"
         data-title="The Protest"
@@ -107,7 +116,6 @@
       </article>
 
 
-      <!-- 07 -->
       <article
         class="painting-slide"
         data-title="Mother of a Protest"
@@ -121,7 +129,6 @@
       </article>
 
 
-      <!-- 08 -->
       <article
         class="painting-slide"
         data-title="With Pictures on a Wall"
@@ -135,7 +142,6 @@
       </article>
 
 
-      <!-- 09 -->
       <article
         class="painting-slide"
         data-title="Trip to Germany"
@@ -151,8 +157,11 @@
     </section>
 
 
-    <!-- BOTTOM LEFT — changes with current painting -->
-    <aside class="painting-meta" aria-live="polite">
+    <!-- CURRENT WORK INFO -->
+    <aside
+      class="painting-meta"
+      aria-live="polite"
+    >
 
       <p
         class="painting-meta-title"
@@ -167,33 +176,15 @@
     </aside>
 
 
-    <!-- BOTTOM RIGHT -->
+    <!-- THIRD CLICK: FULL SCREEN -->
     <div
-      class="painting-counter"
-      id="paintingCounter"
-      aria-live="polite"
-    >
-      01/09
-    </div>
-
-
-    <!-- ZOOM -->
-    <div
-      class="painting-lightbox"
-      id="paintingLightbox"
+      class="painting-fullscreen"
+      id="paintingFullscreen"
       aria-hidden="true"
     >
 
-      <button
-        class="painting-lightbox-close"
-        type="button"
-        aria-label="Close enlarged painting"
-      >
-        ×
-      </button>
-
       <img
-        id="paintingLightboxImage"
+        id="paintingFullscreenImage"
         alt=""
       >
 

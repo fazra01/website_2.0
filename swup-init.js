@@ -1,8 +1,11 @@
 function initPaintingsPage() {
+  const page =
+    document.querySelector(".paintings-page");
+
   const gallery =
     document.getElementById("paintingsGallery");
 
-  if (!gallery) {
+  if (!page || !gallery) {
     return function () {};
   }
 
@@ -15,55 +18,34 @@ function initPaintingsPage() {
     ...gallery.querySelectorAll(".painting-image")
   ];
 
+
   const metaTitle =
     document.getElementById("paintingMetaTitle");
 
   const metaDetails =
     document.getElementById("paintingMetaDetails");
 
-  const counter =
-    document.getElementById("paintingCounter");
 
-  const lightbox =
-    document.getElementById("paintingLightbox");
+  const fullscreen =
+    document.getElementById("paintingFullscreen");
 
-  const lightboxImage =
-    document.getElementById("paintingLightboxImage");
-
-  const closeButton =
-    lightbox.querySelector(
-      ".painting-lightbox-close"
-    );
+  const fullscreenImage =
+    document.getElementById("paintingFullscreenImage");
 
 
+  let mode = "strip";
   let activeIndex = 0;
   let scrollFrame = null;
 
 
   /* =====================================
-     UPDATE CURRENT WORK
+     META
   ===================================== */
 
-  function updatePaintingInfo() {
+  function updateMeta(index) {
+    const slide = slides[index];
 
-    const width =
-      gallery.clientWidth || window.innerWidth;
-
-    const nextIndex = Math.max(
-      0,
-      Math.min(
-        slides.length - 1,
-        Math.round(
-          gallery.scrollLeft / width
-        )
-      )
-    );
-
-
-    activeIndex = nextIndex;
-
-    const slide =
-      slides[activeIndex];
+    if (!slide) return;
 
 
     metaTitle.textContent =
@@ -71,38 +53,256 @@ function initPaintingsPage() {
 
     metaDetails.textContent =
       slide.dataset.details || "";
-
-
-    counter.textContent =
-      `${String(activeIndex + 1).padStart(2, "0")}` +
-      `/` +
-      `${String(slides.length).padStart(2, "0")}`;
-  }
-
-
-  function handleScroll() {
-
-    if (scrollFrame) {
-      cancelAnimationFrame(scrollFrame);
-    }
-
-    scrollFrame =
-      requestAnimationFrame(
-        updatePaintingInfo
-      );
-
   }
 
 
   /* =====================================
-     MOUSE WHEEL → HORIZONTAL MOVEMENT
+     FIND CURRENT FOCUSED WORK
+  ===================================== */
+
+  function updateFocusedIndex() {
+    if (mode !== "focus") return;
+
+
+    const width =
+      gallery.clientWidth ||
+      window.innerWidth;
+
+
+    activeIndex = Math.max(
+      0,
+      Math.min(
+        slides.length - 1,
+
+        Math.round(
+          gallery.scrollLeft / width
+        )
+      )
+    );
+
+
+    updateMeta(activeIndex);
+  }
+
+
+  function handleScroll() {
+    if (scrollFrame) {
+      cancelAnimationFrame(scrollFrame);
+    }
+
+
+    scrollFrame =
+      requestAnimationFrame(
+        updateFocusedIndex
+      );
+  }
+
+
+  /* =====================================
+     STRIP → FOCUS
+  ===================================== */
+
+  function enterFocus(index) {
+    activeIndex = index;
+    mode = "focus";
+
+
+    page.classList.remove(
+      "mode-strip"
+    );
+
+    page.classList.add(
+      "mode-focus"
+    );
+
+
+    updateMeta(activeIndex);
+
+
+    /*
+      Wait one frame so each work has
+      become exactly 100vw before
+      moving to the selected painting.
+    */
+
+    requestAnimationFrame(() => {
+
+      gallery.scrollTo({
+        left:
+          activeIndex *
+          gallery.clientWidth,
+
+        behavior: "auto"
+      });
+
+    });
+  }
+
+
+  /* =====================================
+     FOCUS → STRIP
+  ===================================== */
+
+  function enterStrip() {
+    mode = "strip";
+
+
+    page.classList.remove(
+      "mode-focus"
+    );
+
+    page.classList.add(
+      "mode-strip"
+    );
+
+
+    /*
+      Keep the painting we were viewing
+      roughly centered when returning
+      to the strip.
+    */
+
+    requestAnimationFrame(() => {
+
+      const slide =
+        slides[activeIndex];
+
+
+      if (!slide) return;
+
+
+      const target =
+        slide.offsetLeft -
+        (
+          gallery.clientWidth -
+          slide.offsetWidth
+        ) / 2;
+
+
+      gallery.scrollTo({
+        left: Math.max(0, target),
+        behavior: "auto"
+      });
+
+    });
+  }
+
+
+  /* =====================================
+     FULL SCREEN
+  ===================================== */
+
+  function openFullscreen(image) {
+    mode = "fullscreen";
+
+
+    fullscreenImage.src =
+      image.src;
+
+    fullscreenImage.alt =
+      image.alt;
+
+
+    fullscreen.classList.add(
+      "open"
+    );
+
+
+    fullscreen.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+  }
+
+
+  function closeFullscreen() {
+    mode = "focus";
+
+
+    fullscreen.classList.remove(
+      "open"
+    );
+
+
+    fullscreen.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+
+    fullscreenImage.removeAttribute(
+      "src"
+    );
+  }
+
+
+  /* =====================================
+     PAINTING CLICK
+  ===================================== */
+
+  function handlePaintingClick(event) {
+    const image =
+      event.currentTarget;
+
+
+    const index =
+      images.indexOf(image);
+
+
+    /*
+      FIRST CLICK:
+      strip → focused painting
+    */
+
+    if (mode === "strip") {
+      enterFocus(index);
+      return;
+    }
+
+
+    /*
+      SECOND CLICK:
+      focused painting → full screen
+    */
+
+    if (mode === "focus") {
+      activeIndex = index;
+
+      updateMeta(activeIndex);
+
+      openFullscreen(image);
+    }
+  }
+
+
+  /*
+    THIRD CLICK:
+    full screen → back to focused view
+  */
+
+  function handleFullscreenClick() {
+    if (mode === "fullscreen") {
+      closeFullscreen();
+    }
+  }
+
+
+  /* =====================================
+     HORIZONTAL SCROLLING
   ===================================== */
 
   function handleWheel(event) {
+    if (mode === "fullscreen") {
+      return;
+    }
+
 
     /*
-      Normal trackpad horizontal gestures still work.
-      Vertical mouse-wheel movement becomes horizontal.
+      Trackpads that are already moving
+      horizontally keep their native motion.
+
+      Vertical wheel motion becomes
+      horizontal gallery movement.
     */
 
     if (
@@ -116,7 +316,36 @@ function initPaintingsPage() {
         event.deltaY;
 
     }
+  }
 
+
+  /* =====================================
+     MOVE ONE WORK
+  ===================================== */
+
+  function goToPainting(index) {
+    if (mode !== "focus") return;
+
+
+    activeIndex = Math.max(
+      0,
+      Math.min(
+        slides.length - 1,
+        index
+      )
+    );
+
+
+    gallery.scrollTo({
+      left:
+        activeIndex *
+        gallery.clientWidth,
+
+      behavior: "smooth"
+    });
+
+
+    updateMeta(activeIndex);
   }
 
 
@@ -124,59 +353,49 @@ function initPaintingsPage() {
      KEYBOARD
   ===================================== */
 
-  function goToPainting(index) {
-
-    const clampedIndex =
-      Math.max(
-        0,
-        Math.min(
-          slides.length - 1,
-          index
-        )
-      );
-
-
-    gallery.scrollTo({
-      left:
-        clampedIndex *
-        gallery.clientWidth,
-
-      behavior: "smooth"
-    });
-
-  }
-
-
   function handleKeydown(event) {
 
-    if (lightbox.classList.contains("open")) {
+    if (mode === "fullscreen") {
 
       if (event.key === "Escape") {
-        closeLightbox();
+        closeFullscreen();
       }
 
       return;
     }
 
 
-    if (event.key === "ArrowRight") {
+    if (mode === "focus") {
 
-      event.preventDefault();
+      if (event.key === "ArrowRight") {
 
-      goToPainting(
-        activeIndex + 1
-      );
+        event.preventDefault();
 
-    }
+        goToPainting(
+          activeIndex + 1
+        );
+
+      }
 
 
-    if (event.key === "ArrowLeft") {
+      if (event.key === "ArrowLeft") {
 
-      event.preventDefault();
+        event.preventDefault();
 
-      goToPainting(
-        activeIndex - 1
-      );
+        goToPainting(
+          activeIndex - 1
+        );
+
+      }
+
+
+      if (event.key === "Escape") {
+
+        event.preventDefault();
+
+        enterStrip();
+
+      }
 
     }
 
@@ -184,59 +403,20 @@ function initPaintingsPage() {
 
 
   /* =====================================
-     ZOOM
+     RESIZE
   ===================================== */
 
-  function openLightbox(event) {
-
-    const image =
-      event.currentTarget;
-
-    lightboxImage.src =
-      image.src;
-
-    lightboxImage.alt =
-      image.alt;
-
-    lightbox.classList.add(
-      "open"
-    );
-
-    lightbox.setAttribute(
-      "aria-hidden",
-      "false"
-    );
-
-  }
+  function handleResize() {
+    if (mode !== "focus") return;
 
 
-  function closeLightbox() {
+    gallery.scrollTo({
+      left:
+        activeIndex *
+        gallery.clientWidth,
 
-    lightbox.classList.remove(
-      "open"
-    );
-
-    lightbox.setAttribute(
-      "aria-hidden",
-      "true"
-    );
-
-    lightboxImage.removeAttribute(
-      "src"
-    );
-
-  }
-
-
-  function handleLightboxClick(event) {
-
-    if (
-      event.target === lightbox ||
-      event.target === lightboxImage
-    ) {
-      closeLightbox();
-    }
-
+      behavior: "auto"
+    });
   }
 
 
@@ -264,29 +444,39 @@ function initPaintingsPage() {
   );
 
 
+  window.addEventListener(
+    "resize",
+    handleResize
+  );
+
+
   images.forEach(image => {
 
     image.addEventListener(
       "click",
-      openLightbox
+      handlePaintingClick
     );
 
   });
 
 
-  lightbox.addEventListener(
+  fullscreen.addEventListener(
     "click",
-    handleLightboxClick
+    handleFullscreenClick
   );
 
 
-  closeButton.addEventListener(
-    "click",
-    closeLightbox
+  /* =====================================
+     INITIAL STATE
+  ===================================== */
+
+  page.classList.remove(
+    "mode-focus"
   );
 
-
-  updatePaintingInfo();
+  page.classList.add(
+    "mode-strip"
+  );
 
 
   /* =====================================
@@ -296,7 +486,9 @@ function initPaintingsPage() {
   return function cleanupPaintingsPage() {
 
     if (scrollFrame) {
-      cancelAnimationFrame(scrollFrame);
+      cancelAnimationFrame(
+        scrollFrame
+      );
     }
 
 
@@ -318,25 +510,25 @@ function initPaintingsPage() {
     );
 
 
+    window.removeEventListener(
+      "resize",
+      handleResize
+    );
+
+
     images.forEach(image => {
 
       image.removeEventListener(
         "click",
-        openLightbox
+        handlePaintingClick
       );
 
     });
 
 
-    lightbox.removeEventListener(
+    fullscreen.removeEventListener(
       "click",
-      handleLightboxClick
-    );
-
-
-    closeButton.removeEventListener(
-      "click",
-      closeLightbox
+      handleFullscreenClick
     );
 
   };
