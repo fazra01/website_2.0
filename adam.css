@@ -541,38 +541,66 @@ a {
   min-height: 85vh;
 
   padding:
-    22vh
+    14vh
     var(--page-x)
     14vh;
 
   display: grid;
-  align-content: center;
+
+  grid-template-columns:
+    1fr
+    minmax(280px, 34vw)
+    1fr;
+
+  gap: 5vw;
+
+  align-items: center;
 
   border-top: 1px solid rgba(0,0,0,.14);
 }
 
-.adam-making-eyebrow {
-  margin: 0 0 2vh;
 
-  font-size: var(--small-size);
-}
+/* THE MAKING OF */
 
-.adam-making-heading h2 {
+.adam-making-title {
   margin: 0;
 
-  font-size: clamp(74px, 12vw, 190px);
-  line-height: .82;
+  font-size: clamp(52px, 6vw, 100px);
+  line-height: .95;
+
   font-weight: 400;
 }
 
+
+/* CENTER LOOPING VIDEO */
+
+.adam-making-video {
+  margin: 0;
+
+  width: 100%;
+}
+
+.adam-making-video video {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  max-height: 48vh;
+
+  object-fit: contain;
+}
+
+
+/* ARABIC ADAM */
+
 .adam-making-ar {
-  margin:
-    1vh
-    0
-    0
-    auto;
+  margin: 0;
+
+  justify-self: end;
 
   direction: rtl;
+  text-align: right;
 
   font-family:
     "Geeza Pro",
@@ -580,66 +608,87 @@ a {
     Arial,
     sans-serif;
 
-  font-size: clamp(48px, 7vw, 110px);
+  font-size: clamp(54px, 7vw, 110px);
   line-height: 1;
 }
 
-
 /* =====================================
-   PUPPET IMAGE STACK
+   PUPPET DRAWINGS — STAGGERED STICKY
 ===================================== */
 
 .adam-puppet-stack {
   position: relative;
 
-  min-height: 145vh;
+  min-height: 235vh;
 
   padding:
-    8vh
-    var(--page-x)
-    20vh;
+    10vh
+    7vw
+    35vh;
+
+  display: grid;
+
+  grid-template-columns:
+    22vw
+    22vw
+    22vw;
+
+  justify-content: space-between;
+
+  align-items: start;
 }
+
+
+/*
+  Each drawing moves upward naturally
+  with the page, then STICKS at the
+  exact same vertical position.
+*/
 
 .adam-puppet {
-  position: absolute;
+  position: sticky;
+
+  top: 14vh;
+
+  width: 100%;
+
+  align-self: start;
 }
 
+
 .adam-puppet img {
+  display: block;
+
   width: 100%;
   height: auto;
 }
 
-.adam-puppet-one {
-  top: 10vh;
-  left: 7vw;
 
-  width: min(40vw, 630px);
+/* FIRST IMAGE STARTS HIGHEST */
+
+.adam-puppet-one {
+  margin-top: 0;
 
   z-index: 1;
 }
 
+
+/* SECOND STARTS LOWER */
+
 .adam-puppet-two {
-  top: 34vh;
-  left: 34vw;
-
-  width: min(32vw, 500px);
-
-  z-index: 3;
-
-  transform: rotate(1deg);
-}
-
-.adam-puppet-three {
-  top: 70vh;
-  right: 7vw;
-
-  width: min(35vw, 560px);
+  margin-top: 38vh;
 
   z-index: 2;
-
-  transform: rotate(-1.4deg);
 }
 
+
+/* THIRD STARTS LOWEST */
+
+.adam-puppet-three {
+  margin-top: 76vh;
+
+  z-index: 3;
+}
 
 /* =====================================
    TEST FILM
@@ -774,8 +823,56 @@ a {
 .adam-last-copy {
   padding-bottom: 24vh;
 }
+/* =====================================
+   TOP RIGHT TEXT — SIZE ONLY
+   DO NOT CHANGE LAYOUT
+===================================== */
+
+.adam-lede {
+  font-size: clamp(18px, 1.25vw, 20px);
+}
+
+.adam-top-label {
+  font-size: clamp(18px, 1.2vw, 20px);
+}
+
+.adam-top-synopsis-grid {
+  font-size: clamp(17px, 1.15vw, 19px);
+}
+
+.adam-top-synopsis-grid .adam-kicker {
+  font-size: clamp(14px, 0.95vw, 16px);
+}
+
+.adam-facts {
+  font-size: clamp(15px, 1vw, 17px);
+}
+/* =====================================
+   STILL CAPTIONS — SIZE + SPACING ONLY
+===================================== */
+
+.adam-still figcaption {
+  margin-top: 3.2vh;
+
+  font-size: clamp(16px, 1.1vw, 19px);
+  line-height: 1.3;
+}
+/* =====================================
+   TIGHTER SECTION SPACING — ONLY
+===================================== */
+
+/* Reduce vertical whitespace between
+   Watch, About the Film, Awards, etc. */
+.adam-editorial {
+  padding-top: 7vh;
+  padding-bottom: 7vh;
+}
 
 
+/* Reduce the giant gap after Still 02 */
+.adam-stills {
+  padding-bottom: 7vh;
+}
 /* =====================================
    MOBILE
 ===================================== */
