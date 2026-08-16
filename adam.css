@@ -1,0 +1,782 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  background: #f7f7f3;
+  color: #111;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+figure {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+
+/* =====================================
+   PAGE
+===================================== */
+
+.adam-page {
+  --page-x: 7vw;
+  --copy-size: clamp(17px, 1.25vw, 21px);
+  --small-size: clamp(13px, .95vw, 16px);
+
+  width: 100%;
+}
+
+
+/* =====================================
+   HERO
+===================================== */
+
+.adam-hero {
+  position: relative;
+
+  width: 100%;
+  min-height: 100vh;
+
+  overflow: clip;
+
+  background: #111;
+}
+
+.adam-hero-media {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.adam-hero-media img {
+  width: 100%;
+  height: 100vh;
+
+  object-fit: cover;
+  object-position: center;
+
+  transform: scale(1.035);
+  transition: transform 1.2s cubic-bezier(.2,.75,.2,1);
+}
+
+.adam-page.adam-ready .adam-hero-media img {
+  transform: scale(1);
+}
+
+.adam-hero-wash {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.04),
+      rgba(0,0,0,.03) 60%,
+      rgba(0,0,0,.22)
+    );
+
+  pointer-events: none;
+}
+
+.adam-hero-titles {
+  position: absolute;
+  z-index: 4;
+
+  top: 8vh;
+  left: var(--page-x);
+  right: var(--page-x);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  pointer-events: none;
+}
+
+.adam-hero-titles h1 {
+  margin: 0;
+
+  color: #fff;
+
+  font-size: clamp(48px, 6vw, 100px);
+  line-height: .94;
+  font-weight: 400;
+}
+
+.adam-title-ar {
+  direction: rtl;
+  text-align: right;
+
+  font-family:
+    "Geeza Pro",
+    "Noto Naskh Arabic",
+    Arial,
+    sans-serif;
+}
+
+
+/* =====================================
+   SECTION BASE
+===================================== */
+
+.adam-section {
+  position: relative;
+}
+
+.adam-intro,
+.adam-editorial,
+.adam-awards {
+  padding:
+    15vh
+    var(--page-x);
+}
+
+
+/* =====================================
+   REVEALS
+===================================== */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+
+  transition:
+    opacity .7s ease,
+    transform .9s cubic-bezier(.2,.75,.2,1);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.adam-reveal-image {
+  transition:
+    opacity .8s ease,
+    transform 1s cubic-bezier(.2,.75,.2,1);
+}
+
+
+/* =====================================
+   INTRO
+===================================== */
+
+.adam-intro {
+  display: grid;
+
+  grid-template-columns:
+    24vw
+    minmax(0, 1fr);
+
+  gap: 8vw;
+
+  align-items: start;
+}
+
+.adam-intro-meta {
+  font-size: var(--small-size);
+  line-height: 1.35;
+}
+
+.adam-intro-meta p {
+  margin: 0 0 .35em;
+}
+
+.adam-intro-copy {
+  max-width: 900px;
+}
+
+.adam-lede {
+  margin: 0;
+
+  font-size: clamp(28px, 3vw, 50px);
+  line-height: 1.13;
+}
+
+.adam-facts {
+  margin-top: 8vh;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 1.2em 2em;
+
+  font-size: var(--small-size);
+}
+
+.adam-facts p {
+  margin: 0;
+}
+
+
+/* =====================================
+   LAYERED FILM STILLS
+===================================== */
+
+.adam-layered {
+  min-height: 155vh;
+
+  padding:
+    8vh
+    var(--page-x)
+    20vh;
+}
+
+.adam-layer-base {
+  position: sticky;
+  top: 8vh;
+
+  width: min(76vw, 1180px);
+}
+
+.adam-layer-base img {
+  width: 100%;
+  height: auto;
+}
+
+.adam-layer-float {
+  position: relative;
+  z-index: 3;
+
+  width: min(38vw, 600px);
+
+  margin:
+    -28vh
+    3vw
+    0
+    auto;
+
+  transform:
+    translateY(
+      calc(
+        45px -
+        (var(--adam-layer-progress, 0) * 45px)
+      )
+    )
+    rotate(-1.2deg);
+
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.12);
+}
+
+.adam-layer-float.is-visible {
+  opacity: 1;
+}
+
+
+/* =====================================
+   EDITORIAL TEXT
+===================================== */
+
+.adam-editorial {
+  display: grid;
+
+  grid-template-columns:
+    24vw
+    minmax(0, 1fr);
+
+  gap: 8vw;
+
+  align-items: start;
+}
+
+.adam-editorial-label {
+  font-size: clamp(18px, 1.35vw, 23px);
+  line-height: 1.2;
+}
+
+.adam-editorial-label p {
+  margin: 0;
+}
+
+.adam-editorial-body {
+  max-width: 900px;
+
+  font-size: var(--copy-size);
+  line-height: 1.5;
+}
+
+.adam-editorial-body p {
+  margin:
+    0
+    0
+    1.45em;
+}
+
+.adam-columns,
+.adam-synopsis-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 5vw;
+}
+
+.adam-kicker {
+  margin-bottom: 1em !important;
+
+  font-size: var(--small-size);
+  font-style: italic;
+}
+
+.adam-watch-link {
+  display: inline-block;
+
+  font-size: clamp(38px, 4.2vw, 72px);
+  line-height: 1;
+
+  text-decoration: none;
+
+  transition:
+    transform .25s ease,
+    opacity .25s ease;
+}
+
+.adam-watch-link:hover {
+  transform: translateX(8px);
+  opacity: .58;
+}
+
+.adam-small {
+  margin-top: 4vh !important;
+
+  font-size: var(--small-size);
+}
+
+
+/* =====================================
+   AWARDS
+===================================== */
+
+.adam-awards {
+  display: grid;
+
+  grid-template-columns:
+    24vw
+    minmax(0, 1fr);
+
+  gap: 8vw;
+}
+
+.adam-awards-list {
+  max-width: 950px;
+
+  border-top: 1px solid rgba(0,0,0,.35);
+}
+
+.adam-awards-list p {
+  margin: 0;
+
+  padding:
+    14px
+    0;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 3vw;
+
+  border-bottom: 1px solid rgba(0,0,0,.22);
+
+  font-size: var(--small-size);
+  line-height: 1.35;
+}
+
+
+/* =====================================
+   MAKING TITLE
+===================================== */
+
+.adam-making-heading {
+  min-height: 85vh;
+
+  padding:
+    22vh
+    var(--page-x)
+    14vh;
+
+  display: grid;
+  align-content: center;
+
+  border-top: 1px solid rgba(0,0,0,.14);
+}
+
+.adam-making-eyebrow {
+  margin: 0 0 2vh;
+
+  font-size: var(--small-size);
+}
+
+.adam-making-heading h2 {
+  margin: 0;
+
+  font-size: clamp(74px, 12vw, 190px);
+  line-height: .82;
+  font-weight: 400;
+}
+
+.adam-making-ar {
+  margin:
+    1vh
+    0
+    0
+    auto;
+
+  direction: rtl;
+
+  font-family:
+    "Geeza Pro",
+    "Noto Naskh Arabic",
+    Arial,
+    sans-serif;
+
+  font-size: clamp(48px, 7vw, 110px);
+  line-height: 1;
+}
+
+
+/* =====================================
+   PUPPET IMAGE STACK
+===================================== */
+
+.adam-puppet-stack {
+  position: relative;
+
+  min-height: 145vh;
+
+  padding:
+    8vh
+    var(--page-x)
+    20vh;
+}
+
+.adam-puppet {
+  position: absolute;
+}
+
+.adam-puppet img {
+  width: 100%;
+  height: auto;
+}
+
+.adam-puppet-one {
+  top: 10vh;
+  left: 7vw;
+
+  width: min(40vw, 630px);
+
+  z-index: 1;
+}
+
+.adam-puppet-two {
+  top: 34vh;
+  left: 34vw;
+
+  width: min(32vw, 500px);
+
+  z-index: 3;
+
+  transform: rotate(1deg);
+}
+
+.adam-puppet-three {
+  top: 70vh;
+  right: 7vw;
+
+  width: min(35vw, 560px);
+
+  z-index: 2;
+
+  transform: rotate(-1.4deg);
+}
+
+
+/* =====================================
+   TEST FILM
+===================================== */
+
+.adam-test-film {
+  padding:
+    6vh
+    var(--page-x)
+    18vh;
+}
+
+.adam-video-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  background: #000;
+}
+
+.adam-video-frame iframe {
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+}
+
+.adam-test-film > p {
+  margin:
+    1.2vh
+    0
+    0;
+
+  font-size: var(--small-size);
+}
+
+
+/* =====================================
+   SET COLLAGE
+===================================== */
+
+.adam-set-collage {
+  min-height: 140vh;
+
+  padding:
+    8vh
+    var(--page-x)
+    22vh;
+
+  display: grid;
+
+  grid-template-columns:
+    1.15fr
+    .85fr;
+
+  grid-template-rows:
+    auto
+    auto;
+
+  gap:
+    5vw
+    4vw;
+
+  align-items: start;
+}
+
+.adam-set-one {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+
+  position: sticky;
+  top: 8vh;
+}
+
+.adam-set-two {
+  grid-column: 2;
+  grid-row: 1;
+
+  margin-top: 20vh;
+
+  transform: rotate(.8deg);
+}
+
+.adam-set-three {
+  grid-column: 2;
+  grid-row: 2;
+
+  margin:
+    -5vh
+    0
+    0
+    -8vw;
+
+  position: relative;
+  z-index: 4;
+
+  transform: rotate(-1deg);
+
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.1);
+}
+
+.adam-set img {
+  width: 100%;
+  height: auto;
+}
+
+
+/* =====================================
+   PASSPORT IMAGE
+===================================== */
+
+.adam-passports {
+  padding:
+    10vh
+    var(--page-x)
+    3vh;
+}
+
+.adam-passports img {
+  width: 100%;
+  height: auto;
+}
+
+.adam-passports figcaption {
+  margin-top: 1.2vh;
+
+  font-size: var(--small-size);
+}
+
+.adam-last-copy {
+  padding-bottom: 24vh;
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 760px) {
+
+  .adam-page {
+    --page-x: 7vw;
+  }
+
+  .adam-hero {
+    min-height: 82svh;
+  }
+
+  .adam-hero-media,
+  .adam-hero-media img {
+    min-height: 82svh;
+    height: 82svh;
+  }
+
+  .adam-hero-titles {
+    top: 6vh;
+  }
+
+  .adam-hero-titles h1 {
+    font-size: clamp(42px, 13vw, 68px);
+  }
+
+  .adam-intro,
+  .adam-editorial,
+  .adam-awards {
+    display: block;
+  }
+
+  .adam-intro-meta,
+  .adam-editorial-label {
+    margin-bottom: 7vh;
+  }
+
+  .adam-lede {
+    font-size: clamp(28px, 8vw, 42px);
+  }
+
+  .adam-columns,
+  .adam-synopsis-grid {
+    grid-template-columns: 1fr;
+    gap: 4vh;
+  }
+
+  .adam-layered {
+    min-height: 110vh;
+    padding-bottom: 12vh;
+  }
+
+  .adam-layer-base {
+    width: 86vw;
+    top: 8vh;
+  }
+
+  .adam-layer-float {
+    width: 58vw;
+    margin-top: -12vh;
+  }
+
+  .adam-awards-list p {
+    grid-template-columns: 1fr;
+    gap: .4em;
+  }
+
+  .adam-making-heading {
+    min-height: 65vh;
+  }
+
+  .adam-puppet-stack {
+    min-height: auto;
+
+    padding:
+      8vh
+      var(--page-x)
+      16vh;
+
+    display: grid;
+
+    gap: 4vh;
+  }
+
+  .adam-puppet {
+    position: relative !important;
+
+    inset: auto !important;
+
+    width: 100% !important;
+
+    transform: none !important;
+  }
+
+  .adam-puppet-two {
+    width: 76% !important;
+    margin-left: auto;
+  }
+
+  .adam-puppet-three {
+    width: 82% !important;
+  }
+
+  .adam-set-collage {
+    min-height: auto;
+
+    display: grid;
+    grid-template-columns: 1fr;
+
+    gap: 4vh;
+  }
+
+  .adam-set-one,
+  .adam-set-two,
+  .adam-set-three {
+    grid-column: auto;
+    grid-row: auto;
+
+    position: relative;
+
+    top: auto;
+
+    margin: 0;
+
+    transform: none;
+  }
+
+}
