@@ -1,16 +1,35 @@
 window.initAdamPage = function () {
-  const page = document.querySelector(".adam-page");
+
+  const page =
+    document.querySelector(".adam-page");
 
   if (!page) {
     return function () {};
   }
 
-  const revealItems = [
-    ...page.querySelectorAll("[data-reveal]")
+
+  const heroImage =
+    document.getElementById("adamHeroImage");
+
+  const heroTitles = [
+    ...page.querySelectorAll(
+      ".adam-crossing-title"
+    )
   ];
 
+
+  const revealItems = [
+    ...page.querySelectorAll(
+      "[data-reveal]"
+    )
+  ];
+
+
   const layered =
-    document.getElementById("adamLayered");
+    document.getElementById(
+      "adamLayered"
+    );
+
 
   let scrollFrame = null;
 
@@ -20,61 +39,131 @@ window.initAdamPage = function () {
   ===================================== */
 
   requestAnimationFrame(() => {
-    page.classList.add("adam-ready");
+
+    page.classList.add(
+      "adam-ready"
+    );
+
   });
+
+
+  /* =====================================
+     ADAM TITLE / IMAGE CROSSING
+  ===================================== */
+
+  function updateTitleColor() {
+
+    if (!heroImage) return;
+
+
+    const imageRect =
+      heroImage.getBoundingClientRect();
+
+
+    heroTitles.forEach(title => {
+
+      const titleRect =
+        title.getBoundingClientRect();
+
+
+      const overlap =
+        imageRect.bottom -
+        titleRect.top;
+
+
+      const ratio = Math.max(
+        0,
+        Math.min(
+          1,
+          overlap /
+          titleRect.height
+        )
+      );
+
+
+      title.style.setProperty(
+        "--split",
+        `${ratio * 100}%`
+      );
+
+    });
+
+  }
 
 
   /* =====================================
      SCROLL REVEALS
   ===================================== */
 
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add(
-            "is-visible"
-          );
+  const observer =
+    new IntersectionObserver(
 
-          observer.unobserve(
-            entry.target
-          );
-        }
-      });
-    },
-    {
-      threshold: 0.12,
-      rootMargin:
-        "0px 0px -8% 0px"
-    }
-  );
+      entries => {
+
+        entries.forEach(entry => {
+
+          if (
+            entry.isIntersecting
+          ) {
+
+            entry.target.classList.add(
+              "is-visible"
+            );
+
+
+            observer.unobserve(
+              entry.target
+            );
+
+          }
+
+        });
+
+      },
+
+      {
+        threshold: 0.12,
+
+        rootMargin:
+          "0px 0px -8% 0px"
+      }
+
+    );
 
 
   revealItems.forEach(item => {
+
     observer.observe(item);
+
   });
 
 
   /* =====================================
-     VERY SUBTLE IMAGE-OVER-IMAGE PARALLAX
+     IMAGE-OVER-IMAGE PARALLAX
   ===================================== */
 
   function updateLayerProgress() {
-    scrollFrame = null;
 
     if (!layered) return;
+
 
     const rect =
       layered.getBoundingClientRect();
 
+
     const viewport =
       window.innerHeight;
 
+
     const total =
-      rect.height + viewport;
+      rect.height +
+      viewport;
+
 
     const passed =
-      viewport - rect.top;
+      viewport -
+      rect.top;
+
 
     const progress =
       Math.max(
@@ -90,20 +179,45 @@ window.initAdamPage = function () {
       "--adam-layer-progress",
       progress.toFixed(4)
     );
+
+  }
+
+
+  /* =====================================
+     ONE SCROLL FRAME
+  ===================================== */
+
+  function updateFrame() {
+
+    scrollFrame = null;
+
+    updateTitleColor();
+
+    updateLayerProgress();
+
   }
 
 
   function handleScroll() {
-    if (scrollFrame !== null) {
+
+    if (
+      scrollFrame !== null
+    ) {
       return;
     }
 
+
     scrollFrame =
       requestAnimationFrame(
-        updateLayerProgress
+        updateFrame
       );
+
   }
 
+
+  /* =====================================
+     LISTENERS
+  ===================================== */
 
   window.addEventListener(
     "scroll",
@@ -118,7 +232,27 @@ window.initAdamPage = function () {
   );
 
 
-  updateLayerProgress();
+  if (heroImage) {
+
+    const image =
+      heroImage.querySelector("img");
+
+
+    if (image) {
+
+      image.addEventListener(
+        "load",
+        handleScroll
+      );
+
+    }
+
+  }
+
+
+  requestAnimationFrame(
+    updateFrame
+  );
 
 
   /* =====================================
@@ -128,16 +262,23 @@ window.initAdamPage = function () {
   return function cleanupAdamPage() {
 
     revealItems.forEach(item => {
+
       observer.unobserve(item);
+
     });
+
 
     observer.disconnect();
 
 
-    if (scrollFrame !== null) {
+    if (
+      scrollFrame !== null
+    ) {
+
       cancelAnimationFrame(
         scrollFrame
       );
+
     }
 
 
@@ -152,5 +293,24 @@ window.initAdamPage = function () {
       handleScroll
     );
 
+
+    if (heroImage) {
+
+      const image =
+        heroImage.querySelector("img");
+
+
+      if (image) {
+
+        image.removeEventListener(
+          "load",
+          handleScroll
+        );
+
+      }
+
+    }
+
   };
+
 };

@@ -654,6 +654,16 @@ function initCurrentPage() {
   return;
 }
 if (
+  document.querySelector(".adam-page") &&
+  window.initAdamPage
+) {
+
+  cleanupCurrentPage =
+    window.initAdamPage();
+
+  return;
+}
+if (
   document.querySelector(".contact-page")
 ) {
 

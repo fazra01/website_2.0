@@ -310,17 +310,31 @@ window.initHomePage = function () {
             
             if (key === "memory") {
 
-                if (typeof swup !== "undefined") {
-                    swup.navigate("paintings.html");
-                } else {
-                    window.location.href =
-                    "paintings.html";
-                }
-
-                return;
+            if (typeof swup !== "undefined") {
+                swup.navigate("paintings.html");
+            } else {
+                window.location.href =
+                "paintings.html";
             }
 
-            console.log("Open project:", key);
+            return;
+        }
+
+
+        if (key === "adam") {
+
+            if (typeof swup !== "undefined") {
+                swup.navigate("adam.html");
+            } else {
+                window.location.href =
+                "adam.html";
+            }
+
+            return;
+        }
+
+
+        console.log("Open project:", key);
         });
         });
         });

@@ -97,30 +97,75 @@ a {
   pointer-events: none;
 }
 
-.adam-hero-titles {
-  position: absolute;
-  z-index: 4;
+/* =====================================
+   ADAM SCROLLING HERO TITLE
+===================================== */
 
-  top: 8vh;
-  left: var(--page-x);
-  right: var(--page-x);
+.adam-hero-scroll {
+  position: relative;
+}
+
+
+/*
+  Same behavior as Artist Statement:
+  title stays fixed in one viewport
+  position while the image moves.
+*/
+
+.adam-sticky-titles {
+  position: sticky;
+
+  top: 16vh;
+
+  height: 0;
+
+  padding: 0 7vw;
 
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 
+  z-index: 10;
+
   pointer-events: none;
 }
 
-.adam-hero-titles h1 {
-  margin: 0;
 
-  color: #fff;
+/* ENGLISH + ARABIC */
+
+.adam-crossing-title {
+  --split: 100%;
+
+  display: inline-block;
+
+  margin: 0;
 
   font-size: clamp(48px, 6vw, 100px);
   line-height: .94;
+
   font-weight: 400;
+
+  color: transparent;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #fff 0,
+      #fff var(--split),
+      #111 var(--split),
+      #111 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
 }
+
+
+/*
+  Arabic behaves exactly like Artist Statement:
+  white while over image,
+  transparent once image passes.
+*/
 
 .adam-title-ar {
   direction: rtl;
@@ -131,6 +176,28 @@ a {
     "Noto Naskh Arabic",
     Arial,
     sans-serif;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #fff 0,
+      #fff var(--split),
+      transparent var(--split),
+      transparent 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+
+/*
+  Gives Adam time to remain sticky
+  after the poster has passed.
+*/
+
+.adam-hero-spacer {
+  height: 32vh;
 }
 
 
@@ -180,6 +247,8 @@ a {
    INTRO
 ===================================== */
 
+
+
 .adam-intro {
   display: grid;
 
@@ -227,7 +296,14 @@ a {
   margin: 0;
 }
 
+.adam-intro {
 
+  padding-top: 0;
+}
+
+.adam-intro-copy {
+  grid-column: 2;
+}
 /* =====================================
    LAYERED FILM STILLS
 ===================================== */
