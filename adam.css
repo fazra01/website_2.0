@@ -538,46 +538,40 @@ a {
 ===================================== */
 
 .adam-making-heading {
-  min-height: 85vh;
+  min-height: 100vh;
 
   padding:
     14vh
     var(--page-x)
-    14vh;
+    16vh;
 
-  display: grid;
-
-  grid-template-columns:
-    1fr
-    minmax(280px, 34vw)
-    1fr;
-
-  gap: 5vw;
-
+  display: flex;
+  flex-direction: column;
   align-items: center;
 
-  border-top: 1px solid rgba(0,0,0,.14);
+  border-top: none;
 }
 
 
 /* THE MAKING OF */
 
-.adam-making-title {
-  margin: 0;
+.adam-making-eyebrow {
+  margin: 0 0 6vh;
 
-  font-size: clamp(52px, 6vw, 100px);
+  font-size: clamp(58px, 7vw, 110px);
   line-height: .95;
-
   font-weight: 400;
+
+  white-space: nowrap;
 }
 
 
-/* CENTER LOOPING VIDEO */
+/* VIDEO */
 
 .adam-making-video {
-  margin: 0;
+  width: min(52vw, 760px);
 
-  width: 100%;
+  margin-bottom: 6vh;
 }
 
 .adam-making-video video {
@@ -585,10 +579,6 @@ a {
 
   width: 100%;
   height: auto;
-
-  max-height: 48vh;
-
-  object-fit: contain;
 }
 
 
@@ -597,10 +587,8 @@ a {
 .adam-making-ar {
   margin: 0;
 
-  justify-self: end;
-
   direction: rtl;
-  text-align: right;
+  text-align: center;
 
   font-family:
     "Geeza Pro",
@@ -608,10 +596,20 @@ a {
     Arial,
     sans-serif;
 
-  font-size: clamp(54px, 7vw, 110px);
+  font-size: clamp(58px, 7vw, 110px);
   line-height: 1;
 }
 
+
+/* STAGGER THE EXISTING REVEAL */
+
+.adam-making-video[data-reveal] {
+  transition-delay: .12s;
+}
+
+.adam-making-ar[data-reveal] {
+  transition-delay: .24s;
+}
 /* =====================================
    PUPPET DRAWINGS — STAGGERED STICKY
 ===================================== */
@@ -928,9 +926,29 @@ a {
     gap: .4em;
   }
 
-  .adam-making-heading {
-    min-height: 65vh;
-  }
+.adam-making-heading {
+  min-height: auto;
+
+  padding:
+    12vh
+    var(--page-x)
+    14vh;
+}
+
+.adam-making-eyebrow {
+  font-size: clamp(42px, 13vw, 68px);
+  white-space: nowrap;
+  margin-bottom: 5vh;
+}
+
+.adam-making-video {
+  width: 100%;
+  margin-bottom: 5vh;
+}
+
+.adam-making-ar {
+  font-size: clamp(42px, 13vw, 68px);
+}
 
   .adam-puppet-stack {
     min-height: auto;
