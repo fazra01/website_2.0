@@ -25,12 +25,6 @@ window.initAdamPage = function () {
   ];
 
 
-  const layered =
-    document.getElementById(
-      "adamLayered"
-    );
-
-
   let scrollFrame = null;
 
 
@@ -142,45 +136,7 @@ window.initAdamPage = function () {
      IMAGE-OVER-IMAGE PARALLAX
   ===================================== */
 
-  function updateLayerProgress() {
 
-    if (!layered) return;
-
-
-    const rect =
-      layered.getBoundingClientRect();
-
-
-    const viewport =
-      window.innerHeight;
-
-
-    const total =
-      rect.height +
-      viewport;
-
-
-    const passed =
-      viewport -
-      rect.top;
-
-
-    const progress =
-      Math.max(
-        0,
-        Math.min(
-          1,
-          passed / total
-        )
-      );
-
-
-    layered.style.setProperty(
-      "--adam-layer-progress",
-      progress.toFixed(4)
-    );
-
-  }
 
 
   /* =====================================
@@ -192,8 +148,6 @@ window.initAdamPage = function () {
     scrollFrame = null;
 
     updateTitleColor();
-
-    updateLayerProgress();
 
   }
 
