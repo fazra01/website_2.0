@@ -1,0 +1,497 @@
+* {
+  box-sizing: border-box;
+}
+
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  background: #f7f7f3;
+  color: #111;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+}
+
+
+body {
+  overflow-x: hidden;
+}
+
+
+figure {
+  margin: 0;
+}
+
+
+img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+}
+
+
+p {
+  margin-top: 0;
+}
+
+
+
+/* =====================================
+   PAGE
+===================================== */
+
+.tazewell-page {
+  width: 100%;
+
+  --editorial-width: min(54vw, 820px);
+
+  --copy-size:
+    clamp(18px, 1.28vw, 22px);
+
+  --caption-size:
+    clamp(13px, .9vw, 16px);
+}
+
+
+
+/* =====================================
+   ADAM-STYLE REVEAL
+===================================== */
+
+.tazewell-page [data-reveal] {
+  opacity: 0;
+
+  transform:
+    translateY(28px);
+
+  transition:
+    opacity 1s ease,
+    transform 1.25s
+      cubic-bezier(.2,.75,.2,1);
+}
+
+
+.tazewell-page [data-reveal].is-visible {
+  opacity: 1;
+
+  transform:
+    translateY(0);
+}
+
+
+
+/* =====================================
+   OPENING
+===================================== */
+
+.tz-opening {
+  position: relative;
+
+  width:
+    var(--editorial-width);
+
+  margin:
+    0
+    auto;
+
+  padding:
+    8vh
+    0
+    10vh;
+}
+
+
+
+/* TITLE + HERO */
+
+.tz-opening-composition {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    min(15vw, 205px);
+
+  column-gap: 2.2vw;
+
+  align-items: start;
+}
+
+
+
+/* SMALL MOVING LABEL */
+
+.tz-moving-title {
+  position: relative;
+
+  justify-self: end;
+
+  margin:
+    5vh
+    0
+    0;
+
+  padding-right:
+    .8vw;
+
+  font-size:
+    clamp(13px, .95vw, 16px);
+
+  line-height: 1;
+
+  font-weight: 400;
+
+  white-space: nowrap;
+
+  will-change: transform;
+}
+
+
+
+/* VERTICAL HERO */
+
+.tz-hero {
+  width: 100%;
+}
+
+
+
+/* DATE / LOCATION */
+
+.tz-meta {
+  margin-top:
+    2.2vh;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr
+    1fr;
+
+  gap: 2vw;
+
+  font-size:
+    var(--caption-size);
+
+  line-height: 1.3;
+}
+
+
+.tz-meta span:nth-child(2) {
+  text-align: center;
+}
+
+
+.tz-meta span:nth-child(3) {
+  text-align: right;
+}
+
+
+
+/* OPENING COPY */
+
+.tz-opening-copy {
+  margin-top:
+    4.5vh;
+
+  font-size:
+    var(--copy-size);
+
+  line-height:
+    1.46;
+}
+
+
+.tz-opening-copy p {
+  margin: 0;
+}
+
+
+
+/* =====================================
+   LARGE ROOM 3 RENDER
+===================================== */
+
+.tz-large-render {
+  width:
+    var(--editorial-width);
+
+  margin:
+    2vh
+    auto
+    0;
+}
+
+
+
+/* =====================================
+   PROCESS COPY
+===================================== */
+
+.tz-process-copy {
+  width:
+    var(--editorial-width);
+
+  margin:
+    0
+    auto;
+
+  padding:
+    5vh
+    0
+    9vh;
+
+  font-size:
+    var(--copy-size);
+
+  line-height:
+    1.46;
+}
+
+
+.tz-process-copy p {
+  margin: 0;
+}
+
+
+
+/* =====================================
+   TWO RENDERS
+===================================== */
+
+.tz-render-pair {
+  width:
+    var(--editorial-width);
+
+  margin:
+    0
+    auto;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:
+    1.5vw;
+}
+
+
+.tz-pair-right {
+  transition-delay:
+    .12s;
+}
+
+
+
+/* =====================================
+   REFLECTION
+===================================== */
+
+.tz-reflection {
+  width:
+    var(--editorial-width);
+
+  margin:
+    0
+    auto;
+
+  padding:
+    5vh
+    0
+    10vh;
+
+  font-size:
+    var(--copy-size);
+
+  line-height:
+    1.46;
+}
+
+
+.tz-reflection p {
+  margin: 0;
+}
+
+
+
+/* =====================================
+   SMALL EARLY STUDY
+===================================== */
+
+.tz-small-study {
+  width:
+    min(31vw, 465px);
+
+  margin:
+    0
+    auto
+    17vh;
+}
+
+
+
+/* =====================================
+   ROOM 5 PROGRESSION
+
+   NOT two centered images.
+===================================== */
+
+.tz-room5-sequence {
+  position: relative;
+
+  width: 100%;
+
+  padding:
+    0
+    0
+    22vh;
+}
+
+
+
+/* EARLY:
+   smaller + left of center */
+
+.tz-room5-early {
+  width:
+    min(37vw, 560px);
+
+  margin-left:
+    15vw;
+}
+
+
+
+/* FINAL:
+   larger + farther right */
+
+.tz-room5-final {
+  width:
+    min(61vw, 930px);
+
+  margin:
+    13vh
+    0
+    0
+    32vw;
+}
+
+
+
+/* =====================================
+   CAPTIONS
+===================================== */
+
+figcaption {
+  margin-top:
+    2vh;
+
+  font-size:
+    var(--caption-size);
+
+  line-height:
+    1.3;
+}
+
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 760px) {
+
+  .tazewell-page {
+    --editorial-width: 88vw;
+
+    --copy-size:
+      clamp(17px, 4.8vw, 20px);
+  }
+
+
+
+  /* OPENING */
+
+  .tz-opening {
+    padding-top:
+      8vh;
+  }
+
+
+  .tz-opening-composition {
+    grid-template-columns:
+      1fr
+      38vw;
+  }
+
+
+  .tz-moving-title {
+    font-size:
+      13px;
+
+    transform:
+      none !important;
+  }
+
+
+  .tz-meta {
+    font-size:
+      11px;
+  }
+
+
+
+  /* PAIR CAN STAY AS PAIR */
+
+  .tz-render-pair {
+    gap:
+      3vw;
+  }
+
+
+
+  /* SMALL STUDY */
+
+  .tz-small-study {
+    width:
+      65vw;
+
+    margin-bottom:
+      13vh;
+  }
+
+
+
+  /* ROOM 5 */
+
+  .tz-room5-early {
+    width:
+      72vw;
+
+    margin-left:
+      6vw;
+  }
+
+
+  .tz-room5-final {
+    width:
+      88vw;
+
+    margin:
+      10vh
+      0
+      0
+      auto;
+  }
+
+}

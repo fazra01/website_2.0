@@ -332,7 +332,23 @@ window.initHomePage = function () {
 
             return;
         }
+        if (key === "tazewell") {
 
+            if (typeof swup !== "undefined") {
+
+                swup.navigate(
+                    "tazewell.html"
+                );
+
+            } else {
+
+                window.location.href =
+                    "tazewell.html";
+
+            }
+
+            return;
+        }
 
         console.log("Open project:", key);
         });

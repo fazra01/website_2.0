@@ -663,6 +663,17 @@ if (
 
   return;
 }
+
+if (
+  document.querySelector(".tazewell-page")
+) {
+
+  cleanupCurrentPage =
+    initTazewellPage();
+
+  return;
+}
+
 if (
   document.querySelector(".contact-page")
 ) {
