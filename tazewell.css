@@ -23,128 +23,107 @@ body {
 }
 
 
-figure {
+figure,
+h1,
+p {
   margin: 0;
 }
 
 
 img {
   display: block;
-
   width: 100%;
   height: auto;
 }
 
 
-p {
-  margin-top: 0;
-}
-
-
-
 /* =====================================
-   PAGE
+   SAME CORE SYSTEM AS ADAM
 ===================================== */
 
 .tazewell-page {
   width: 100%;
 
-  --editorial-width: min(54vw, 820px);
+  --page-x: 7vw;
 
   --copy-size:
-    clamp(18px, 1.28vw, 22px);
+    clamp(17px, 1.25vw, 21px);
 
-  --caption-size:
-    clamp(13px, .9vw, 16px);
+  --small-size:
+    clamp(13px, .95vw, 16px);
 }
 
 
-
 /* =====================================
-   ADAM-STYLE REVEAL
+   SAME REVEAL LANGUAGE AS ADAM
 ===================================== */
 
 .tazewell-page [data-reveal] {
   opacity: 0;
 
-  transform:
-    translateY(28px);
+  transform: translateY(28px);
 
   transition:
-    opacity 1s ease,
-    transform 1.25s
-      cubic-bezier(.2,.75,.2,1);
+    opacity .7s ease,
+    transform .9s cubic-bezier(.2,.75,.2,1);
 }
 
 
 .tazewell-page [data-reveal].is-visible {
   opacity: 1;
-
-  transform:
-    translateY(0);
+  transform: translateY(0);
 }
 
 
 
 /* =====================================
    OPENING
+
+   Uses the same 24vw + 8vw relationship
+   as Adam's editorial sections.
 ===================================== */
 
 .tz-opening {
   position: relative;
 
-  width:
-    var(--editorial-width);
-
-  margin:
-    0
-    auto;
+  min-height: 100vh;
 
   padding:
-    8vh
-    0
-    10vh;
-}
-
-
-
-/* TITLE + HERO */
-
-.tz-opening-composition {
-  position: relative;
+    13vh
+    var(--page-x)
+    14vh;
 
   display: grid;
 
   grid-template-columns:
-    1fr
-    min(15vw, 205px);
+    24vw
+    minmax(0, 1fr);
 
-  column-gap: 2.2vw;
+  gap: 8vw;
 
   align-items: start;
 }
 
 
 
-/* SMALL MOVING LABEL */
+/* LEFT COLUMN */
 
-.tz-moving-title {
+.tz-opening-left {
   position: relative;
 
-  justify-self: end;
+  min-height: 68vh;
+}
 
-  margin:
-    5vh
-    0
-    0;
 
-  padding-right:
-    .8vw;
+/* THIS IS A REAL TITLE AGAIN */
+
+.tz-moving-title {
+  margin: 0;
 
   font-size:
-    clamp(13px, .95vw, 16px);
+    clamp(42px, 4.5vw, 72px);
 
-  line-height: 1;
+  line-height: .95;
 
   font-weight: 400;
 
@@ -155,90 +134,105 @@ p {
 
 
 
-/* VERTICAL HERO */
-
-.tz-hero {
-  width: 100%;
-}
-
-
-
-/* DATE / LOCATION */
+/* SMALL INFO */
 
 .tz-meta {
-  margin-top:
-    2.2vh;
+  position: absolute;
 
-  display: grid;
-
-  grid-template-columns:
-    1fr
-    1fr
-    1fr;
-
-  gap: 2vw;
+  left: 0;
+  bottom: 0;
 
   font-size:
-    var(--caption-size);
+    var(--small-size);
 
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 
-.tz-meta span:nth-child(2) {
-  text-align: center;
-}
-
-
-.tz-meta span:nth-child(3) {
-  text-align: right;
+.tz-meta p {
+  margin-bottom: .35em;
 }
 
 
 
-/* OPENING COPY */
+/* RIGHT SIDE */
+
+.tz-opening-right {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-end;
+}
+
+
+
+/* NARROW ISOMETRIC IMAGE */
+
+.tz-hero {
+  width:
+    min(23vw, 350px);
+
+  margin-right: 3vw;
+}
+
+
+
+/* INTRO COPY */
 
 .tz-opening-copy {
-  margin-top:
-    4.5vh;
+  align-self: flex-start;
+
+  width:
+    min(54vw, 780px);
+
+  margin-top: 10vh;
 
   font-size:
     var(--copy-size);
 
-  line-height:
-    1.46;
+  line-height: 1.5;
 }
 
 
 .tz-opening-copy p {
-  margin: 0;
+  margin-bottom: 1.45em;
 }
 
 
 
 /* =====================================
-   LARGE ROOM 3 RENDER
+   ROOM 3
+
+   Like Adam's stills:
+   image suddenly gets enormous.
 ===================================== */
 
-.tz-large-render {
-  width:
-    var(--editorial-width);
+.tz-room3-section {
+  padding:
+    5vh
+    0
+    13vh;
+}
 
-  margin:
-    2vh
-    auto
-    0;
+
+.tz-room3 {
+  width: 92vw;
+
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
 
 /* =====================================
-   PROCESS COPY
+   PROCESS TEXT
+
+   Large centered editorial breathing room.
 ===================================== */
 
 .tz-process-copy {
   width:
-    var(--editorial-width);
+    min(58vw, 900px);
 
   margin:
     0
@@ -247,48 +241,60 @@ p {
   padding:
     5vh
     0
-    9vh;
+    17vh;
 
   font-size:
-    var(--copy-size);
+    clamp(19px, 1.35vw, 23px);
 
-  line-height:
-    1.46;
-}
-
-
-.tz-process-copy p {
-  margin: 0;
+  line-height: 1.5;
 }
 
 
 
 /* =====================================
-   TWO RENDERS
+   ROOM 4 + ROOM 5 DETAIL
+
+   Sight Unseen influence happens HERE:
+   unequal scale + offset.
 ===================================== */
 
 .tz-render-pair {
-  width:
-    var(--editorial-width);
+  width: 100%;
 
-  margin:
+  padding:
     0
-    auto;
+    var(--page-x)
+    18vh;
 
   display: grid;
 
   grid-template-columns:
-    1fr
-    1fr;
+    minmax(0, 1.7fr)
+    minmax(0, .9fr);
 
-  gap:
-    1.5vw;
+  gap: 5vw;
+
+  align-items: start;
 }
 
 
-.tz-pair-right {
-  transition-delay:
-    .12s;
+
+/* BIGGER FIRST IMAGE */
+
+.tz-room4 {
+  width: 100%;
+}
+
+
+
+/* SMALLER IMAGE ENTERS LOWER */
+
+.tz-room5-detail {
+  width: 100%;
+
+  margin-top: 18vh;
+
+  transition-delay: .12s;
 }
 
 
@@ -299,108 +305,98 @@ p {
 
 .tz-reflection {
   width:
-    var(--editorial-width);
+    min(58vw, 900px);
 
   margin:
     0
     auto;
 
   padding:
-    5vh
+    4vh
     0
-    10vh;
+    18vh;
 
   font-size:
-    var(--copy-size);
+    clamp(19px, 1.35vw, 23px);
 
-  line-height:
-    1.46;
-}
-
-
-.tz-reflection p {
-  margin: 0;
+  line-height: 1.5;
 }
 
 
 
 /* =====================================
-   SMALL EARLY STUDY
+   EARLY ROOM 3
+
+   Isolated smaller image.
 ===================================== */
 
-.tz-small-study {
-  width:
-    min(31vw, 465px);
+.tz-early-room3 {
+  width: 42vw;
 
   margin:
     0
-    auto
-    17vh;
+    var(--page-x)
+    20vh
+    auto;
 }
 
 
 
 /* =====================================
-   ROOM 5 PROGRESSION
+   ROOM 5 DEVELOPMENT
 
-   NOT two centered images.
+   Small provisional image →
+   much larger resolved image.
 ===================================== */
 
 .tz-room5-sequence {
-  position: relative;
-
   width: 100%;
 
-  padding:
-    0
-    0
-    22vh;
+  padding-bottom: 24vh;
 }
 
 
 
-/* EARLY:
-   smaller + left of center */
+/* EARLY — LEFT */
 
 .tz-room5-early {
-  width:
-    min(37vw, 560px);
+  width: 44vw;
 
   margin-left:
-    15vw;
+    var(--page-x);
 }
 
 
 
-/* FINAL:
-   larger + farther right */
+/* FINAL — BIGGER + RIGHT */
 
 .tz-room5-final {
-  width:
-    min(61vw, 930px);
+  width: 70vw;
 
   margin:
-    13vh
+    16vh
+    5vw
     0
-    0
-    32vw;
+    auto;
+
+  transition-delay: .12s;
 }
 
 
 
 /* =====================================
    CAPTIONS
+
+   EXACT SCALE LANGUAGE FROM ADAM STILLS
 ===================================== */
 
 figcaption {
-  margin-top:
-    2vh;
+  margin-top: 3.2vh;
 
   font-size:
-    var(--caption-size);
+    clamp(16px, 1.1vw, 19px);
 
-  line-height:
-    1.3;
+  line-height: 1.3;
 }
 
 
@@ -412,32 +408,32 @@ figcaption {
 @media (max-width: 760px) {
 
   .tazewell-page {
-    --editorial-width: 88vw;
-
-    --copy-size:
-      clamp(17px, 4.8vw, 20px);
+    --page-x: 7vw;
   }
-
 
 
   /* OPENING */
 
   .tz-opening {
-    padding-top:
-      8vh;
+    min-height: auto;
+
+    display: block;
+
+    padding:
+      11vh
+      var(--page-x)
+      15vh;
   }
 
 
-  .tz-opening-composition {
-    grid-template-columns:
-      1fr
-      38vw;
+  .tz-opening-left {
+    min-height: auto;
   }
 
 
   .tz-moving-title {
     font-size:
-      13px;
+      clamp(42px, 12vw, 62px);
 
     transform:
       none !important;
@@ -445,29 +441,92 @@ figcaption {
 
 
   .tz-meta {
-    font-size:
-      11px;
+    position: static;
+
+    margin-top: 7vh;
+  }
+
+
+  .tz-opening-right {
+    display: block;
+  }
+
+
+  .tz-hero {
+    width: 46vw;
+
+    margin:
+      10vh
+      0
+      0
+      auto;
+  }
+
+
+  .tz-opening-copy {
+    width: 100%;
+
+    margin-top: 10vh;
   }
 
 
 
-  /* PAIR CAN STAY AS PAIR */
+  /* BIG IMAGE */
+
+  .tz-room3 {
+    width: 92vw;
+  }
+
+
+
+  /* TEXT */
+
+  .tz-process-copy,
+  .tz-reflection {
+    width: 86vw;
+
+    font-size:
+      clamp(18px, 5vw, 21px);
+  }
+
+
+
+  /* IMAGE PAIR */
 
   .tz-render-pair {
-    gap:
-      3vw;
+    display: block;
+
+    padding-bottom: 14vh;
+  }
+
+
+  .tz-room4 {
+    width: 86vw;
+  }
+
+
+  .tz-room5-detail {
+    width: 66vw;
+
+    margin:
+      9vh
+      0
+      0
+      auto;
   }
 
 
 
-  /* SMALL STUDY */
+  /* EARLY STUDY */
 
-  .tz-small-study {
-    width:
-      65vw;
+  .tz-early-room3 {
+    width: 72vw;
 
-    margin-bottom:
-      13vh;
+    margin:
+      0
+      var(--page-x)
+      15vh
+      auto;
   }
 
 
@@ -475,23 +534,17 @@ figcaption {
   /* ROOM 5 */
 
   .tz-room5-early {
-    width:
-      72vw;
-
-    margin-left:
-      6vw;
+    width: 74vw;
   }
 
 
   .tz-room5-final {
-    width:
-      88vw;
+    width: 92vw;
 
     margin:
-      10vh
-      0
-      0
-      auto;
+      11vh
+      4vw
+      0;
   }
 
 }

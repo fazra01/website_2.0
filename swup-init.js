@@ -617,6 +617,175 @@ function initContactPage() {
 
   };
 }
+/* =====================================
+   TAZEWELL PAGE
+===================================== */
+
+function initTazewellPage() {
+
+  const page = document.querySelector(".tazewell-page");
+
+  if (!page) {
+    return function () {};
+  }
+
+  const revealItems = [
+    ...page.querySelectorAll("[data-reveal]")
+  ];
+
+  const movingTitle =
+    document.getElementById("tzMovingTitle");
+
+  const opening =
+    document.getElementById("tzOpening");
+
+  let scrollFrame = null;
+
+
+  /* REVEALS */
+
+  const observer = new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if (!entry.isIntersecting) return;
+
+        entry.target.classList.add("is-visible");
+
+        observer.unobserve(entry.target);
+
+      });
+
+    },
+    {
+      threshold: 0.1,
+      rootMargin: "0px 0px -5% 0px"
+    }
+  );
+
+
+  revealItems.forEach(item => {
+
+    /*
+      If something is already on-screen when
+      the page loads, reveal it immediately.
+    */
+
+    const rect = item.getBoundingClientRect();
+
+    if (
+      rect.top < window.innerHeight &&
+      rect.bottom > 0
+    ) {
+      item.classList.add("is-visible");
+    } else {
+      observer.observe(item);
+    }
+
+  });
+
+
+
+  /* MOVING "THE GRIFFIN MSI" */
+
+  function updateMovingTitle() {
+
+    if (!movingTitle || !opening) return;
+
+
+    if (window.innerWidth <= 760) {
+
+      movingTitle.style.transform =
+        "translateY(0)";
+
+      return;
+    }
+
+
+    const rect =
+      opening.getBoundingClientRect();
+
+
+    const distance =
+      opening.offsetHeight * 0.75;
+
+
+    const progress =
+      Math.max(
+        0,
+        Math.min(
+          1,
+          -rect.top / distance
+        )
+      );
+
+
+    const movement =
+      progress * 15;
+
+
+    movingTitle.style.transform =
+      `translateY(${movement}vh)`;
+  }
+
+
+
+  function updateFrame() {
+
+    scrollFrame = null;
+
+    updateMovingTitle();
+  }
+
+
+  function handleScroll() {
+
+    if (scrollFrame !== null) return;
+
+    scrollFrame =
+      requestAnimationFrame(updateFrame);
+  }
+
+
+  window.addEventListener(
+    "scroll",
+    handleScroll,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "resize",
+    handleScroll
+  );
+
+
+  updateMovingTitle();
+
+
+
+  /* CLEANUP FOR SWUP */
+
+  return function cleanupTazewellPage() {
+
+    observer.disconnect();
+
+    window.removeEventListener(
+      "scroll",
+      handleScroll
+    );
+
+    window.removeEventListener(
+      "resize",
+      handleScroll
+    );
+
+    if (scrollFrame !== null) {
+      cancelAnimationFrame(scrollFrame);
+    }
+
+  };
+}
 
 let cleanupCurrentPage = function () {};
 
@@ -663,7 +832,6 @@ if (
 
   return;
 }
-
 if (
   document.querySelector(".tazewell-page")
 ) {
